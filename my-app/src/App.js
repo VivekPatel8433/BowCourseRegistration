@@ -1,5 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+// import React, { useState } from 'react';
+// import Homepage from './pages/Homepage';
+// import Signup from './pages/Signup';
+// import StudentDashboard from './pages/StudentDashboard';
+// import AdminDashboard from './pages/AdminDashboard';
+// import { students } from './data/students';
+
 
 function App() {
   return (
