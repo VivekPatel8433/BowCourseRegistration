@@ -1,5 +1,3 @@
-import {React} from "react";
-
 function Footer() {
   return (
     <footer className="w-full bg-slate-50 border-t mt-12">

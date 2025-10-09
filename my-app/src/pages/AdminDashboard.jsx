@@ -7,3 +7,9 @@
 // - Search courses
 // - View registered students
 // - View submitted contact forms
+function Admin() {
+  return (
+  <h1 className="text-center text-2xl py-10">Admin Dashboard</h1>
+  );
+}
+export default Admin;

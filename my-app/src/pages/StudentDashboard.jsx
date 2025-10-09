@@ -6,3 +6,9 @@
 // - Register for courses (2-5 per term)
 // - Add/Remove courses
 // - Submit contact form to admin
+function Student() {
+  return (
+  <h1 className="text-center text-2xl py-10">Student Dashboard</h1>
+  );
+}
+export default Student;
