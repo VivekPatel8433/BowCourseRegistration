@@ -11,13 +11,12 @@ function App() {
       <Routes>
         <Route element={<View />}>
           <Route index element={<Home />} />
-          <Route path="/create-account" element={<CreateAccount />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/student" element={<Student />} />
+          <Route path="create-account" element={<CreateAccount />} />
+          <Route path="admin" element={<Admin />} />
+          <Route path="student" element={<Student />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
 export default App;
