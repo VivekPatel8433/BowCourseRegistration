@@ -1,0 +1,125 @@
+.courseManager {
+    position: absolute;
+    top:80vw;
+    right: 33vw ;
+   width: 42%;
+  margin: 40px auto;
+  font-family: 'Arial', sans-serif;
+  border:2px,solid,rgba(0,0,0,0.05);
+  border-radius: 15px;
+  padding: 20px;
+
+}
+
+.courseManager h2 {
+  margin-bottom: 20px;
+  margin-left: 20%;
+  font-size: 24px;
+  color: #111;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar button:hover {
+  background-color: #1e4fd4;
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.course-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.course-info strong {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.course-info p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.course-meta {
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  gap: 16px;
+}
+
+.course-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-actions button {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-actions .edit {
+  background-color: #2563eb;
+}
+
+.course-actions .edit:hover {
+  background-color: #1e4fd4;
+}
+
+.course-actions .delete {
+  background-color: #dc2626;
+}
+
+.course-actions .delete:hover {
+  background-color: #b91c1c;
+}
+
+.no-results {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
