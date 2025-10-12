@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <header className="w-full bg-white shadow-sm">
+    <header className="w-full bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="text-xl font-semibold text-slate-800">BowCourse Registration</Link>
+        <Link to="/" className="text-xl font-semibold text-slate-800">BowCourse</Link>
         <nav className="flex items-center gap-4">
           <Link to="/" className="text-sm text-slate-600 hover:text-slate-900"> Home</Link>
           <Link to="/create-account" className="text-sm text-slate-600 hover:text-slate-900">Create Account</Link>
