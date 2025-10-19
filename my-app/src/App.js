@@ -1,22 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import View from "./view/view";
-import Home from "./pages/HomePage";
-import CreateAccount from "./pages/CreateAccount";
-import Admin from "./pages/AdminDashboard";
-import Student from "./pages/StudentDashboard";
+
+import './App.css';
+import AdminLayout from './component/admin-component/admin-dashboard-component/admin-layout';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<View />}>
-          <Route index element={<Home />} />
-          <Route path="create-account" element={<CreateAccount />} />
-          <Route path="admin" element={<Admin />} />
-          <Route path="student" element={<Student />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+<AdminLayout/>
+
+    </>
   );
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> admin-feature
 export default App;
