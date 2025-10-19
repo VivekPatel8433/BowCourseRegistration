@@ -1,0 +1,135 @@
+.dashboard-grid {
+position: relative;
+top: 10vw;
+left: 22vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 20px;
+  width: 70%;
+  height: auto;
+  border: 1px solid,rgba(0,0,0,0.1);
+  border-radius: 15px;
+  
+}
+.faceBook, .faUsers{
+color: #2563eb;
+background-color: white;
+}
+.Card {
+  background: #fff;
+  border: 1px solid #1f18181d;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background: #1e4fd4;
+}
+
+.course-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.course-item strong {
+  font-size: 15px;
+display: block;
+width: 20vw;
+}
+
+.course-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.actions {
+  display: flex;
+  gap: 25px !important;
+justify-content: flex-end;
+align-items: flex-end;
+position: relative;
+top:2vw;
+left: 15vw;
+}
+
+.actions .edit {
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.actions .delete {
+  color: red;
+  cursor: pointer;
+}
+
+.program-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.program-item strong {
+  font-size: 15px;
+}
+
+.program-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.view-all {
+  margin-top: 12px;
+  background: none;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.view-all:hover {
+  background: #eef5ff;
+}

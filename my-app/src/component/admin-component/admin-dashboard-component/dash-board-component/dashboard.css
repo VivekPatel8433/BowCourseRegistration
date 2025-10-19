@@ -1,0 +1,117 @@
+/* Container */
+.dashboard-container {
+  padding: 32px;
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: #f9fafb;
+  height: auto;
+  width: 70vw;
+  position: relative;
+  top: 10vw;
+  left:  20vw;
+}
+
+/* Header */
+.header-title {
+  font-size: 2rem;
+  font-weight: 500;
+  position: relative;
+ 
+  position: relative;
+  left: 10vw;
+}
+
+.header-subtitle {
+ font-size: 0.1rem;
+
+  margin-top: 100px;
+  
+    position: relative;
+    right: 50%;
+}
+
+/* Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 150px;
+}
+
+/* Card */
+.card {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Content */
+.card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Icon Row */
+.icon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+}
+
+.blue { color: #2563eb; }
+.green { color: #16a34a; }
+.purple { color: #7c3aed; }
+.orange { color: #f97316; }
+
+.badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.badge.blue { background-color: #dbeafe; color: #2563eb; margin-left: 5vw; }
+.badge.green { background-color: #dcfce7; color: #16a34a; margin-left: 5vw;  }
+.badge.red { background-color: #fee2e2; color: #b91c1c; margin-left: 5vw;  }
+
+/* Headings & Text */
+h2 {
+  margin-top: 18px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.big-number {
+  margin-top: 8px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.small-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .header-title {
+    font-size: 1.75rem;
+  }
+  .cards-grid {
+    gap: 16px;
+  }
+}
