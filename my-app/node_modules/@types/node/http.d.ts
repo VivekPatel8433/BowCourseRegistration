@@ -200,7 +200,7 @@ declare module "http" {
         "x-frame-options"?: string | undefined;
         "x-xss-protection"?: string | undefined;
     }
-    interface ClientRequestArgs {
+    interface ClientRequestArgs extends Pick<LookupOptions, "hints"> {
         _defaultAgent?: Agent | undefined;
         agent?: Agent | boolean | undefined;
         auth?: string | null | undefined;
@@ -213,7 +213,6 @@ declare module "http" {
         defaultPort?: number | string | undefined;
         family?: number | undefined;
         headers?: OutgoingHttpHeaders | readonly string[] | undefined;
-        hints?: LookupOptions["hints"];
         host?: string | null | undefined;
         hostname?: string | null | undefined;
         insecureHTTPParser?: boolean | undefined;
@@ -234,7 +233,7 @@ declare module "http" {
         socketPath?: string | undefined;
         timeout?: number | undefined;
         uniqueHeaders?: Array<string | string[]> | undefined;
-        joinDuplicateHeaders?: boolean;
+        joinDuplicateHeaders?: boolean | undefined;
     }
     interface ServerOptions<
         Request extends typeof IncomingMessage = typeof IncomingMessage,
@@ -260,7 +259,7 @@ declare module "http" {
          * @default false
          * @since v18.14.0
          */
-        joinDuplicateHeaders?: boolean;
+        joinDuplicateHeaders?: boolean | undefined;
         /**
          * The number of milliseconds of inactivity a server needs to wait for additional incoming data,
          * after it has finished writing the last response, before a socket will be destroyed.
@@ -1452,7 +1451,7 @@ declare module "http" {
         https_proxy?: string | undefined;
         no_proxy?: string | undefined;
     }
-    interface AgentOptions extends Partial<TcpSocketConnectOpts> {
+    interface AgentOptions extends NodeJS.PartialOptions<TcpSocketConnectOpts> {
         /**
          * Keep sockets around in a pool to be used by other requests in the future. Default = false
          */
@@ -1462,6 +1461,16 @@ declare module "http" {
          * Only relevant if keepAlive is set to true.
          */
         keepAliveMsecs?: number | undefined;
+        /**
+         * Milliseconds to subtract from
+         * the server-provided `keep-alive: timeout=...` hint when determining socket
+         * expiration time. This buffer helps ensure the agent closes the socket
+         * slightly before the server does, reducing the chance of sending a request
+         * on a socket that’s about to be closed by the server.
+         * @since v24.7.0
+         * @default 1000
+         */
+        agentKeepAliveTimeoutBuffer?: number | undefined;
         /**
          * Maximum number of sockets to allow per host. Default for Node 0.10 is 5, default for Node 0.12 is Infinity
          */
