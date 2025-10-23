@@ -6,10 +6,10 @@ import { Link,useNavigate } from "react-router-dom";
 const TopNav = () => {
 const navigate=useNavigate();
     const navItems = [
-    { label: "Dashboard", path: "/Student" },
-    { label: "Courses",  path: "/Student/course-registration" },
-    { label: "Profile", path: "/Student/profile" },
-     { label: "Contact", path: "/Student/contact-admin" },
+    { label: "Dashboard", path: "/student" },
+    { label: "Courses",  path: "/student/course-registration" },
+    { label: "Profile", path: "/student/profile" },
+     { label: "Contact", path: "/student/contact-admin" },
   
 
   ];

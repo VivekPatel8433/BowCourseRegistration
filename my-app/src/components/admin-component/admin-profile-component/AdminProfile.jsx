@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import './admin-profile.css';
 import {adminData as AdminInfo} from '../../../data/Admin-mock-data'
 
@@ -6,6 +6,7 @@ const AdminProfile = () => {
   const [adminData, setAdminData] = useState(AdminInfo)
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(adminData);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleEditToggle = () => {
     setFormData(adminData);
@@ -39,6 +40,16 @@ const AdminProfile = () => {
       }));
     }
   }
+    useEffect(() => {
+      if (!currentUser) return;
+  
+      setAdminData((prev) => ({
+        ...prev,
+        ...currentUser,
+      }));
+  
+     
+    }, []);
 
   return (
     <div className="admin-profile">
