@@ -2,12 +2,12 @@
 .dashboard-container {
   padding: 32px;
   font-family: 'Inter', Arial, sans-serif;
-  background-color: #f9fafb;
+ 
   height: auto;
   width: 70vw;
   position: relative;
-  top: 10vw;
-  left:  20vw;
+  top: 2vw;
+  left:  22vw;
 }
 
 /* Header */
@@ -15,18 +15,15 @@
   font-size: 2rem;
   font-weight: 500;
   position: relative;
- 
   position: relative;
-  left: 10vw;
+  right: 5vw;
 }
 
 .header-subtitle {
  font-size: 0.1rem;
-
-  margin-top: 100px;
-  
+  margin-top: 20px;
     position: relative;
-    right: 50%;
+    left: 15%;
 }
 
 /* Grid */
@@ -34,12 +31,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
-  margin-top: 150px;
+  margin-top: 40px;
 }
 
 /* Card */
 .card {
-  background-color: #fff;
+  background-color: #E5EAF6;
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;

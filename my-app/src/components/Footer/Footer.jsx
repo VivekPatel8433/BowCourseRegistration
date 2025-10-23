@@ -1,16 +1,15 @@
+import React from "react";
+import "./Footer.css";
+
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-16">
-      <div className="max-w-7xl mx-auto px-6">
-
+    <footer className="footer">
+      <div className="footer-container">
+        {/* Add your footer content here */}
+        <p className="footer-text">
+          © {new Date().getFullYear()} Bow Course. All rights reserved.
+        </p>
       </div>
-
-
-
-      
-      {/* <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-slate-500">
-        © {new Date().getFullYear()} Bow Course. All rights reserved.
-      </div> */}
     </footer>
   );
 }

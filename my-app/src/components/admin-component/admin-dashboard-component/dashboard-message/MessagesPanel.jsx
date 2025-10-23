@@ -62,7 +62,7 @@ const topMessages = (() => {
   }
 })();
   
-const ViewAllMessages = (id = null,name=null) => {
+const ViewAllMessages = (id = null) => {
   if (id) {
     
     navigate("/admin/messages", {  state: { messageId: id } });
@@ -86,7 +86,7 @@ const CreateNewCourse=()=>{
           <div
             key={index}
             className={`message-card ${msg.status === "unread" ? "new" : ""}`}
-            onClick={()=>ViewAllMessages(msg.id??null,msg.studentName??null)}
+            onClick={()=>ViewAllMessages(msg.id??null)}
           >
             <img src={msg.img??imagePlaceHolder} alt="avatar" className="avatar" />
             <div className="message-info" >
@@ -94,7 +94,7 @@ const CreateNewCourse=()=>{
               <div className="message-text">{msg.message.substring(0,50) + '...'}</div>
               {msg.status ? (
                 <>
-                <span className="message-status">{msg.status?'New':null}</span>
+                <span className="message-status">{msg.status=="unread"?'New':null}</span>
                 <span className="message-time">{timeAgo(msg.submissionDate)}</span>
                 </>
               ) : (
@@ -105,7 +105,7 @@ const CreateNewCourse=()=>{
         ))}
       </div>
 
-      <button className="view-all-btn" onClick={ViewAllMessages}>View All Messages</button>
+      <button className="view-all-btn" onClick={()=>ViewAllMessages()}>View All Messages</button>
 
       <div className="quick-actions">
         <h4>Quick Actions</h4>

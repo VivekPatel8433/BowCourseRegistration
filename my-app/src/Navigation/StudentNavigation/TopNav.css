@@ -1,0 +1,112 @@
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to right, #2c3e50, #d5d5d5);
+  padding: 0 20px;
+  height: 80px;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: "Inter", sans-serif;
+}
+
+/* Left Section */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+.logo-icon {
+  font-size: clamp(28px, 3vw, 48px);
+  color: #2563eb;
+  transition: font-size 0.2s ease-in-out;
+ 
+}
+
+
+.logo-text h1 {
+  font-size: clamp(16px, 1.5vw, 28px);
+  font-weight: bold;
+  margin: 0;
+  color: #111827;
+}
+
+.logo-text span {
+ font-size: clamp(12px, 1vw, 18px);
+  color: #6b7280;
+}
+
+/* Center Links */
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+}
+
+/* Right Section */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+ 
+  position: relative;
+  right: 6vw;
+}
+
+.profile-info {
+  text-align: right;
+  line-height: 1.2;
+}
+
+.profile-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+  position: relative;
+  bottom: 2vw;
+  left: 3vw;
+}
+
+.profile-role {
+  font-size: 12px;
+  color: #6b7280;
+  margin-right: 50px;
+  position: relative;
+  bottom: 2vw;
+    position: relative;
+  bottom:2.5vw;
+  left: 3vw;
+
+
+}
+
+.student-logout{
+ position: relative;
+ left: 3vw;
+}
+
+.student-logout :hover{
+  color: red;
+}
+.profile-image {
+  margin-top: 45px;
+ 
+  width: 36px;                
+  height: 36px;
+  border-radius: 50%;         /* 50% is enough — makes it perfectly circular */
+  overflow: hidden;           
+  object-fit: cover;          /* crops image nicely inside circle */
+  border: 2px solid #e5e7eb;  
+  background-color: #f3f4f6;  /* fallback background */
+}

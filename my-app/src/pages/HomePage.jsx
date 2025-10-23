@@ -1,8 +1,8 @@
-import Section1 from "../components/HopePageSections/Section1";
-import Section2 from "../components/HopePageSections/Section2";
-import Section3 from "../components/HopePageSections/Section3";
-import Section4 from "../components/HopePageSections/Section4";
-import Section5 from "../components/HopePageSections/Section5";
+import Section1 from "../components/HomeComponent/HopePageSections/Section1"
+import Section2 from "../components/HomeComponent/HopePageSections/Section2";
+import Section3 from "../components/HomeComponent/HopePageSections/Section3";
+import Section4 from "../components/HomeComponent/HopePageSections/Section4";
+import Section5 from "../components/HomeComponent/HopePageSections/Section5";
 // What non-users see
 // - View all programs
 // - View all coursese

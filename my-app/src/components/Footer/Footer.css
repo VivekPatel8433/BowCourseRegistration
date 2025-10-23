@@ -1,0 +1,22 @@
+.footer {
+   background: linear-gradient(
+  to left,
+  #4f46e5,  /* indigo/light blue */
+  #7c3aed   /* purple */
+);
+  color: #ffffff;
+  padding: 4rem 1rem;
+  text-align: center;
+   z-index: 9999;         /* highest layer above everything */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.footer-text {
+  font-size: 0.875rem; /* text-sm */
+  color: #94a3b8; /* slate-500 */
+}

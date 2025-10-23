@@ -1,0 +1,49 @@
+.term-selector {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.term-selector h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.term-options {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.term-btn {
+  padding: 12px 25px;
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  background-color: white;
+  color: #4caf50;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.term-btn:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.term-btn.selected {
+  background-color: #4caf50;
+  color: white;
+}
+
+.selected-term {
+  margin-top: 15px;
+  color: #555;
+  font-size: 16px;
+}

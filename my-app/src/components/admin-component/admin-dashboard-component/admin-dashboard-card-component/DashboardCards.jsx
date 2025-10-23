@@ -6,38 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardCards = () => {
   const [courseList,setCourseList]=useState(courses)
+  
   const navigate=useNavigate()
-
-
-  const editCourse = (courseId) => {
-  if (!courseId) {
-    console.warn("No course ID provided");
-    return;
-  }
-
-  navigate("/admin/manage-courses", {
-    state: {
-      isEditing: true,     // a flag
-      courseId: courseId   // the actual ID
-    }
-  });
-};
-
-
-  const deleteCourse = (courseId) => {
-    if (!courseId) {
-      console.warn("No course ID provided");
-      return;
-    }
-    
-    if (window.confirm(`Are you sure you want to delete this course?`)) {
-        setCourseList(prev=>prev.filter(course=>course.id !== courseId))
-    }
-  };
-
-   const viewAllCourses = () => {
-    navigate("/admin/manage-courses");
-  };
 
   const viewAllStudents = () => {
     navigate("/admin/view-students");
@@ -74,20 +44,17 @@ const DashboardCards = () => {
           </button>
         </div>
         <div className="card-body">
-          {courseList.slice(0,3).map((courseItem) => (
+          {courseList.slice(0,4).map((courseItem) => (
             <div className="course-item" key={courseItem.id}>
               <div>
                 <strong >{courseItem.code} - {courseItem.name}</strong>
                 <p >{courseItem.term} • {courseItem.enrolledStudents} students enrolled</p>
               </div>
-              <div className="actions">
-                <FaEdit className="edit"  title="Edit Course" onClick={()=>editCourse(courseItem.id??null)} />
-                <FaTrash className="delete" title="Delete course" onClick={()=>deleteCourse(courseItem.id??null)} />
-              </div>
+             
             </div>
           ))}
         </div>
-        <button className="view-all" onClick={viewAllCourses}>View All Courses</button>
+      
       </div>
 
       {/* Student Overview */}
