@@ -3,7 +3,7 @@ import './message-view.css';
 import {messages as messageInfo} from '../../../../data/messages'
 import {useLocation } from 'react-router-dom';
 import { useAdmin } from '../../../../context/AdminContext';
-const MessageView = () => {
+const MessageView = ({viewMessage}) => {
   const [messages, setMessages] = useState(messageInfo);
   const [filteredMessages, setFilteredMessages] = useState(messages);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,6 +31,31 @@ const MessageView = () => {
   }
 }, [messageId]);
 
+ // Listen for new incoming message from parent
+  useEffect(() => {
+    if (!viewMessage) return;
+
+    const newMessage = {
+      id: messages.length + 1,      // unique id as total length + 1
+      studentName: "Unkown Student",       
+      studentId: viewMessage.studentId || "N/A",
+      email: viewMessage.from || "",
+      program: viewMessage.program || "",
+      semester: viewMessage.semester || 1,
+      subject: viewMessage.subject || "No Subject",
+      message: viewMessage.message || viewMessage.text || "",
+      attachments: viewMessage.file ? [viewMessage.file.name] : [],
+      category: viewMessage.category || "other",
+      priority: viewMessage.priority || "normal",
+      status: 'unread',
+      submissionDate: new Date().toISOString(),
+      response: ''
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+    setFilteredMessages(prev => [...prev, newMessage]);
+    
+  }, [viewMessage]);
   // Categories for filtering
   const categories = [
     'all', 'academic', 'registration', 'financial', 'technical', 'administrative', 'other'

@@ -12,11 +12,11 @@ import "./SideNav.css";
 
 const SideNav = () => {
   const sideNav = [
-    { label: "Dashboard", path: "/Student", icon: <FaTachometerAlt className="icon" /> },
-    { label: "Profile", path: "/Student/profile", icon: <FaUser className="icon" /> },
-    { label: "Term Selection", path: "/Student/term-selection", icon: <FaCalendarAlt className="icon" /> },
-    { label: "Course Registration", path: "/Student/course-registration", icon: <FaBook className="icon" /> },
-    { label: "Contact Admin", path: "/Student/contact-admin", icon: <FaEnvelope className="icon" /> },
+    { label: "Dashboard", path: "/student/dashboard", icon: <FaTachometerAlt className="icon" /> },
+    { label: "Profile", path: "/student/profile", icon: <FaUser className="icon" /> },
+    { label: "Term Selection", path: "/student/term-selection", icon: <FaCalendarAlt className="icon" /> },
+    { label: "Course Registration", path: "/student/course-registration", icon: <FaBook className="icon" /> },
+    { label: "Contact Admin", path: "/student/contact-admin", icon: <FaEnvelope className="icon" /> },
   ];
 
   return (

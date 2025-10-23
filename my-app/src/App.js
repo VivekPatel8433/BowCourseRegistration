@@ -1,6 +1,7 @@
+import React,{useState } from "react";
 import "./App.css";
 import Home from "./pages/HomePage";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import View from "./view/view";
 import CourseOverview from "./components/HomeComponent/CourseOverView/CourseOverview";
 import StudentView from "./view/StudentView";
@@ -16,8 +17,12 @@ import CreateCourse from "./components/admin-component/admin-course-component/cr
 
 import StudentManagement from "./components/admin-component/admin-view-student-component/student-list-component/StudentManagement";
 import MessageView from "./components/admin-component/admin-view-student-component/student-message-component/MessageView";
+import Login from "./components/Login-Signup-component/Login";
+import Signup from "./components/Login-Signup-component/Signup";
 
 function App() {
+    const [registeredUser, setRegisteredUser] = useState(null);
+    const [message,setMessage]=useState(null)
   return (
     <div className="app-background">
       <Routes>
@@ -25,17 +30,18 @@ function App() {
         <Route element={<View />}>
           <Route index element={<Home />} />
           <Route path="Home/courses" element={<CourseOverview />} />
-          <Route path="Home/login" element={null} />
-          <Route path="Home/signup" element={null} />
+          <Route path="Home/login" element={<Login user={registeredUser}/>} />
+          <Route path="Home/signup" element={<Signup onSignup={setRegisteredUser}/>} />
         </Route>
 
         {/* Student layout */}
-        <Route path ="Student" element={<StudentView />}>
+        <Route path ="student" element={<StudentView />}>
           <Route index element={<StudentPage/>} />
-          <Route path="term-selection" element={<Navigate to="/Student" replace />} />
-          <Route path="course-registration" element={<Navigate to="/Student" replace/>}/>
+            <Route path="dashboard" element={<Navigate to="/student" replace/>}/>
+          <Route path="term-selection" element={<Navigate to="/student" replace />} />
+          <Route path="course-registration" element={<Navigate to="/student" replace/>}/>
           <Route path ="profile" element={<StudentProfile/>}/>
-          <Route path="contact-admin" element={<ContactAdmin/>}/>
+          <Route path="contact-admin" element={<ContactAdmin sendMessage={setMessage}/>}/>
         </Route>
 
         {/*Admin layout */}
@@ -45,7 +51,7 @@ function App() {
           <Route path="profile" element={<AdminProfile/>}/>
           <Route path="create-course" element={<CreateCourse/>}/>
           <Route path="view-students" element={<StudentManagement/>}/>
-          <Route path="messages" element={<MessageView/>}/>
+          <Route path="messages" element={<MessageView viewMessage={message}/>}/>
         </Route>
       </Routes>
     </div>

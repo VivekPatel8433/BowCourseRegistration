@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ContactAdmin.css";
 
-const ContactAdmin = () => {
+const ContactAdmin = ({ sendMessage }) => {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -15,11 +15,13 @@ const ContactAdmin = () => {
       return;
     }
 
-    // Simulate sending message to backend
-    console.log("Sender Email:", email);
-    console.log("Subject:", subject);
-    console.log("Message:", message);
-    if (file) console.log("Attached file:", file);
+    // Send message to App state
+    sendMessage({
+      from: email,
+      subject,
+      message,
+      file,
+    });
 
     alert("Message sent successfully!");
 
