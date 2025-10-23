@@ -1,9 +1,9 @@
 .student-management {
     position: relative;
-    top:5vw;
-    left:5vw;
+    top:10px;
+    left:25vw;
   padding: 20px;
-  width: 90%;
+  width: 70%;
   margin: 0;
 }
 
@@ -16,7 +16,7 @@
   margin-bottom: 8px;
   font-size: 2.2rem;
   position: relative;
-  left: 25vw;
+  left: 2vw;
 }
 
 .student-management-header p {
@@ -35,7 +35,7 @@
 }
 
 .stat-card {
-  background: white;
+  background: rgb(214, 208, 225);
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -70,31 +70,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  gap: 20px;
+  gap: 2px;
   flex-wrap: wrap;
 }
 
 .search-filters {
   display: flex;
-  gap: 20px;
+  gap: 2px;
   align-items: center;
   flex: 1;
+
 }
 
 .search-box {
   position: relative;
   flex: 1;
-  max-width: 400px;
+  width: 700px;
+ 
 }
 
-.search-input {
-  width: 100%;
+.Search-input {
+  width: 90%;
   padding: 12px 45px 12px 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
+
+  position: relative;
+  left: 1vw;
 }
 
 .search-input:focus {
@@ -103,13 +107,7 @@
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.search-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #7f8c8d;
-}
+
 
 .filter-group {
   display: flex;
@@ -121,10 +119,10 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  background: white;
+  background:  rgb(214, 208, 225);;
   cursor: pointer;
   position: relative;
-  left: 20vw;
+  right: 1vw;
 }
 
 .btn-export {
@@ -145,7 +143,7 @@
 
 /* Students Table */
 .students-table-container {
-  background: white;
+  background:  rgb(214, 208, 225);;
   border-radius: 12px;
   box-shadow: 0 2px 20px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -158,7 +156,7 @@
 }
 
 .students-table th {
-  background: #f8f9fa;
+  background: rgb(183, 165, 214);
   padding: 16px 12px;
   text-align: left;
   font-weight: 600;
@@ -176,7 +174,7 @@
 }
 
 .student-row:hover {
-  background: #f8f9fa;
+  background: rgb(220, 217, 225);;;
 }
 
 .student-row.inactive {

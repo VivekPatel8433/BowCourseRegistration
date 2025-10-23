@@ -1,0 +1,84 @@
+.term-selection-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #E5E7EB;
+  background-color: #e7eaf6;
+  font-family: Arial, sans-serif;
+  position: relative;
+  top: 25px;
+  right: 11vw;
+}
+
+.term-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.term-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.term-header p {
+  margin: 2px 0 0 0;
+  font-size: 0.9rem;
+  color: #6B7280;
+}
+
+.calendar-icon {
+  color: #2563EB;
+  font-size: 1.5rem;
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.term-card {
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.term-card:hover {
+  border-color: #2563EB;
+}
+
+.term-card.selected {
+  border-color: #2563EB;
+  background-color: #EFF6FF;
+  color: #859fd8;
+}
+
+.term-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.term-period {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 2px 0;
+}
+
+.term-status {
+  font-size: 0.75rem;
+  color: #2563EB;
+}
+
+.term-status.current {
+  font-weight: 600;
+  color: #065F46; /* green for current */
+}

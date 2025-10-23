@@ -1,3 +1,17 @@
+
+export const student ={
+  studentId: "S123456",
+  firstName: "John",
+  lastName: "Doe",
+  email: "john.doe@example.com",
+  phone: "+1234567890",
+  birthday: "2000-01-01",
+  department: "SD",
+  program: "Web Programming",
+  username: "johndoe",
+  status: "Student",
+  photo: null,
+}
 export const students=[
   {
     "id": 1,

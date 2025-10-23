@@ -165,9 +165,9 @@ const StudentManagement = () => {
               placeholder="Search students by name, ID, email, or program..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className="Search-input"
             />
-            <span className="search-icon">🔍</span>
+         
           </div>
           
           <div className="filter-group">
@@ -196,9 +196,6 @@ const StudentManagement = () => {
           </div>
         </div>
         
-        <button onClick={exportStudentData} className="btn btn-export">
-          📥 Export Data
-        </button>
       </div>
 
       {/* Students Table */}

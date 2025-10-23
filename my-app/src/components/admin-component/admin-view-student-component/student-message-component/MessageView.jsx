@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './message-view.css';
 import {messages as messageInfo} from '../../../../data/messages'
 import {useLocation } from 'react-router-dom';
+import { useAdmin } from '../../../../context/AdminContext';
 const MessageView = () => {
   const [messages, setMessages] = useState(messageInfo);
   const [filteredMessages, setFilteredMessages] = useState(messages);
@@ -14,7 +15,8 @@ const MessageView = () => {
   const [isResponding, setIsResponding] = useState(false);
   const {state} = useLocation();
   const messageId =state?.messageId??null
-
+   // use custome hook
+   const {setReadId,setDeletedMessageId}=useAdmin();
  useEffect(() => {
   if (!messageId) return;
 
@@ -22,7 +24,7 @@ const MessageView = () => {
 
   if (msgIndex !== -1) {
     messages[msgIndex].status = 'read';
-
+     setReadId(messageId)
     setMessages([...messages]);
 
     handleSelectMessage(messages[msgIndex]);
@@ -84,6 +86,7 @@ const MessageView = () => {
 
   // Mark message as read
   const markAsRead = (messageId) => {
+    setReadId(messageId)
     setMessages(prev => prev.map(msg =>
       msg.id === messageId ? { ...msg, status: 'read' } : msg
     ));
@@ -129,10 +132,12 @@ const MessageView = () => {
   // Delete message
   const handleDeleteMessage = (messageId) => {
     if (window.confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
+      setDeletedMessageId(messageId)
       setMessages(prev => prev.filter(msg => msg.id !== messageId));
       if (selectedMessage && selectedMessage.id === messageId) {
         setSelectedMessage(null);
       }
+      
     }
   };
 
@@ -185,7 +190,7 @@ const MessageView = () => {
     <div className="message-view">
       <div className="message-view-header">
         <h1>Student Messages</h1>
-        <p>View and respond to messages submitted by students</p>
+       
       </div>
 
       {/* Statistics Cards */}
@@ -223,7 +228,7 @@ const MessageView = () => {
       {/* Controls Section */}
       <div className="controls-section">
         <div className="search-filters">
-          <div className="search-box">
+          <div className="Search-box">
             <input
               type="text"
               placeholder="Search messages by student, subject, or content..."
@@ -231,10 +236,10 @@ const MessageView = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon">🔍</span>
+           
           </div>
           
-          <div className="filter-group">
+          <div className="filter-group" style={{marginLeft:60}} >
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -271,11 +276,7 @@ const MessageView = () => {
           </div>
         </div>
         
-        <div className="action-buttons">
-          <button onClick={markAllAsRead} className="btn btn-secondary">
-            📭 Mark All as Read
-          </button>
-        </div>
+        
       </div>
 
       <div className="messages-container">

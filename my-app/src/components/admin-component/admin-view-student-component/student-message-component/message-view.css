@@ -1,41 +1,45 @@
 /* messages-view.css */
  .message-view{
-
-  width: 80vw;
+  width: 60vw;
   position: relative;
-  top:10vw;
-  left:9vw;
+  top:0;
+  left:25vw;
+
+ 
  }
  .message-view-header{
   position: relative;
-  left: 30vw;
+  left: 3vw;
+  
  }
 
   .message-view-header > p{
   position: relative;
-  right: 5vw;
+  left: 5vw;
+
  }
 .messages-container {
   display: grid;
   grid-template-columns: 400px 1fr;
   gap: 20px;
-  height: calc(100vh - 300px);
+  height:auto;;
   margin-top: 20px;
 }
 
 /* Messages List - Left Sidebar */
 .messages-list {
-  background: white;
+  background: rgb(232, 229, 229);
   border-radius: 8px;
   border: 1px solid #e1e5e9;
   display: flex;
   flex-direction: column;
+  height: 30vw;
 }
 
 .messages-list-header {
   padding: 20px;
   border-bottom: 1px solid #e1e5e9;
-  background: #f8f9fa;
+  background: #a1a1e4;
 }
 
 .messages-list-header h3 {
@@ -46,12 +50,20 @@
 .sort-info {
   font-size: 0.8rem;
   color: #666;
+  
 }
+.Search-box .search-input{
+  width: 26vw;
+  height: 40px;
+
+}
+
 
 .messages-scroll {
   flex: 1;
   overflow-y: auto;
   max-height: calc(100vh - 400px);
+ 
 }
 
 /* Message Items in List */
@@ -60,6 +72,7 @@
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
   transition: background-color 0.2s;
+
 }
 
 .message-item:hover {
@@ -109,12 +122,15 @@
   gap: 10px;
   font-size: 0.8rem;
   color: #666;
+
+  
 }
 
 .message-subject {
   font-weight: 500;
   margin-bottom: 8px;
   font-size: 0.9rem;
+    
 }
 
 .message-preview {
@@ -159,11 +175,12 @@
 
 /* Message Detail - Right Panel */
 .message-detail {
-  background: white;
+  background: rgb(246, 246, 247);
   border-radius: 8px;
   border: 1px solid #e1e5e9;
   display: flex;
   flex-direction: column;
+  width: 40vw;
 }
 
 .message-detail-content {
@@ -179,7 +196,7 @@
   align-items: flex-start;
   padding: 20px;
   border-bottom: 1px solid #e1e5e9;
-  background: #f8f9fa;
+  background:  #a1a1e4;
 }
 
 .detail-subject {

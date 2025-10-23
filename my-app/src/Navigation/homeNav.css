@@ -1,0 +1,75 @@
+.home-nav {
+ background: linear-gradient(to right, #2c3e50, #d5d5d5);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 80px;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: "Inter", sans-serif;
+  
+ 
+}
+
+/* Left Section */
+.left-home{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+.logo-icon {
+  font-size: clamp(28px, 3vw, 48px);
+  color: #2563eb;
+  transition: font-size 0.2s ease-in-out;
+}
+
+
+.logo-text h1 {
+  font-size: clamp(16px, 1.5vw, 28px);
+  font-weight: bold;
+  margin: 0;
+  color: #111827;
+}
+
+.logo-text span {
+ font-size: clamp(12px, 1vw, 18px);
+  color: #6b7280;
+}
+
+/* Center Links */
+.Homenav-links {
+  display: flex;
+  gap: 30px;
+  position: relative;
+  right: 20vw;
+}
+.Homenav-links a:nth-last-of-type(-n + 2) {
+  position: relative;
+  left: 10vw;
+}
+.Homenav-links a:nth-last-of-type(1) {
+ background-color: rgb(37,99,235);
+ width: 6vw;
+ height: 2vw;
+color: rgb(220, 224, 226);
+text-align: center;
+border-radius: 20px;
+border: 1px solid black;
+}
+
+.Homenav-links a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.Homenav-links a:hover {
+  color: #89a0d2;
+}
+
+
+

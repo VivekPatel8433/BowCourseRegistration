@@ -1,0 +1,146 @@
+.registered-courses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", Arial, sans-serif;
+  padding: 20px;
+  position: relative;
+  bottom: 25vw;
+  left: 55vw;
+
+  width: 40vw;
+}
+
+.rcard {
+  width: 520px;
+ background-color: #e7eaf6;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+  border: 1px solid rgba(16, 24, 40, 0.04);
+  padding: 20px;
+   min-height: 40vw;
+}
+
+.rcard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-box {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(180deg, #f0f9ff 0%, #eef2ff 100%);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+}
+
+.rScard-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.course-count {
+  font-size: 13px;
+  background: #eef2ff;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rcourse-item {
+ background: #a2a8d3; 
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.02);
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.course-code {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.course-title {
+  color: #475569;
+  font-size: 14px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.remove-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.add-course-btn {
+  margin-top: 6px;
+  border-radius: 10px;
+  padding: 18px;
+  border: 2px dashed rgba(15, 23, 42, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #334155;
+  font-size: 15px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.add-course-btn:hover {
+  background: #f9fafb;
+  border-color: rgba(15, 23, 42, 0.2);
+}
+
+.add-course-btn .plus {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.03);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.add-course-btn small {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+@media (max-width: 560px) {
+  .card {
+    width: 92%;
+  }
+}

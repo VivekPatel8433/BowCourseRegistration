@@ -4,6 +4,7 @@ import "./dashboard.css";
 import { loginInfo, adminData,programs,courses} from "../../../../data/Admin-mock-data";
 import { students } from "../../../../data/students";
 import {messages} from '../../../../data/messages'
+import { useAdmin } from '../../../../context/AdminContext'
 function Card({ children }) {
   return <div className="card">{children}</div>;
 }
@@ -20,8 +21,11 @@ export default function Dashboard() {
   const [studentsList, setStudentsList] = useState([]);
   const [messagesList, setMessagesList] = useState([]);
   const [unread,setUnread]=useState([])
-  
- useEffect(() => {
+
+
+ const { readId, removedCourseId,deletedMessageId} = useAdmin();
+
+  useEffect(() => {
     setLogin(loginInfo);
     setAdmin(adminData);
      
@@ -30,16 +34,32 @@ export default function Dashboard() {
     setCoursesList(courses);
     setStudentsList(students);
     setMessagesList(messages);
-
+     setUnread(messages.filter(msg => msg.status === "unread")); 
 
   }, []); 
+     // use custome hook
 
- useEffect(() => {
-  if (messagesList) {
-    const filteredMessages = messagesList.filter( (message) => message.status === "unread" );
-    setUnread(filteredMessages);
+  
+   useEffect(() => {
+  if (!readId && !removedCourseId &&!deletedMessageId) return;
+  
+  if (readId) {
+    setUnread((prev) => prev.filter((m) => m.id !==readId));
   }
-}, [messagesList]);  // ✅ watch messagesList, not unread
+
+  if (removedCourseId) {
+    setCoursesList((prev) => prev.filter((c) => c.id != removedCourseId));
+  }
+  if(deletedMessageId){
+ 
+    setMessagesList((prev) => prev.filter((m) => m.id != deletedMessageId));
+
+  
+  }
+}, [readId, removedCourseId,deletedMessageId]);
+
+
+
 
 
   useEffect(() => {
@@ -49,17 +69,10 @@ export default function Dashboard() {
     }
   }, [login, admin]); // This runs whenever login or admin changes
   
-   // Calculate statistics based on your data
-  const stats = {
-    totalCourses: coursesList.length,
-    totalStudents: studentsList.length,
-    totalPrograms: programsList.length,
-    totalMessages: messagesList.length,
-    newMessages: messagesList.filter(msg => msg.status === 'unread').length
-  };
+  
   const programNames = programs.map(p => p.name).join(", ");
 
-console.log(programNames);
+
   return (
     <div className="dashboard-container">
       {/* Header */}
@@ -80,7 +93,7 @@ console.log(programNames);
               <span className="badge blue">Active</span>
             </div>
             <h2>Total Courses</h2>
-            <p className="big-number blue">{stats.totalCourses??0}</p>
+            <p className="big-number blue">{coursesList.length??0}</p>
             <p className="small-text">Across all terms</p>
           </CardContent>
         </Card>
@@ -93,7 +106,7 @@ console.log(programNames);
               <span className="badge green">Active</span>
             </div>
             <h2>Total Students</h2>
-            <p className="big-number green">{stats.totalStudents??0}</p>
+            <p className="big-number green">{studentsList.length??0}</p>
             <p className="small-text">Enrolled students</p>
           </CardContent>
         </Card>
@@ -103,7 +116,7 @@ console.log(programNames);
           <CardContent>
             <GraduationCap className="icon purple" />
             <h2>Programs</h2>
-            <p className="big-number purple">{stats.totalPrograms??0}</p>
+            <p className="big-number purple">{programsList.length??0}</p>
             <p className="small-text">{programNames}</p>
           </CardContent>
         </Card>
@@ -116,7 +129,7 @@ console.log(programNames);
               <span className="badge red">{unread.length??0} New</span>
             </div>
             <h2>Messages</h2>
-            <p className="big-number orange">{stats.totalMessages??0}</p>
+            <p className="big-number orange" >{messagesList.length??0}</p>
             <p className="small-text">Student inquiries</p>
           </CardContent>
         </Card>

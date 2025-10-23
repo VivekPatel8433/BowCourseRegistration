@@ -1,0 +1,62 @@
+.contact-admin {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: rgb(237, 244, 242);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-admin h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.contact-admin form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-admin label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #555;
+}
+
+.contact-admin input,
+.contact-admin textarea {
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.contact-admin textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-admin input[type="file"] {
+  margin-top: 5px;
+}
+
+.contact-admin button {
+  align-self: center;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(157, 177, 234);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.contact-admin button:hover {
+  background-color: #45a049;
+}

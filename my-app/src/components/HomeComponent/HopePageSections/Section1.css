@@ -1,0 +1,107 @@
+.section1-container {
+   background: linear-gradient(
+    to right,
+    #8a8fd6,   /* slightly less green on the left */
+    #5367B1    /* original color on the right */
+  );
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  top: 50px;
+}
+
+.section1-text {
+  margin-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  .section1-text {
+    margin-left: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section1-text {
+    margin-left: 8rem;
+  }
+}
+
+.section1-title {
+  font-size: 2.25rem; /* 4xl */
+  color: white;
+  font-weight: bold;
+  padding-bottom: 2.5rem;
+}
+
+.section1-subtitle {
+  font-size: 1.5rem; /* 2xl */
+  font-weight: bold;
+  color: white;
+  width: 90%;
+}
+
+.section1-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-primary {
+  background-color: white;
+  color: black;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #e5e7eb; /* gray-100 */
+}
+
+.btn-secondary {
+  border: 2px solid white;
+  color: #00ff00; /* green text */
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  background-color: white;
+}
+
+.section1-image-container {
+  position: relative;
+  margin-top: 2.5rem;
+  flex: 1;
+  right: 200px;
+}
+
+.section1-image {
+  width: 100%;
+  max-height: 16rem;
+  border-radius: 1rem;
+  object-fit: cover;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .section1-image {
+    display: block;
+    margin-left: 8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .section1-image {
+    max-height: 20rem;
+  }
+}

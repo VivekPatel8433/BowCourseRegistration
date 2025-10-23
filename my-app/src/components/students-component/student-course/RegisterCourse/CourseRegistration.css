@@ -1,0 +1,128 @@
+.course-registration {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.course-registration h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.dashboard {
+  margin-bottom: 25px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.term-selection {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.term-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.term-btn {
+  padding: 10px 22px;
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  background-color: white;
+  color: #4caf50;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.term-btn.selected,
+.term-btn:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.selected-term {
+  margin-top: 10px;
+  color: #555;
+  font-weight: 500;
+}
+
+.course-search {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.course-search input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.course-list, .registered-courses {
+  margin-bottom: 25px;
+}
+
+.course-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.course-card.registered {
+  background-color: #e6f4ea;
+  border-color: #4caf50;
+}
+
+.course-card button {
+  padding: 6px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  background-color: #4caf50;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.course-card button:hover {
+  background-color: #45a049;
+}
+
+.submit-registration {
+  text-align: center;
+}
+
+.submit-registration button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.submit-registration button:hover {
+  background-color: #45a049;
+}
