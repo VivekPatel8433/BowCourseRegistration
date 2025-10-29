@@ -1,14 +1,13 @@
 .quick-actions-card {
   width: 320px;
- 
   border-radius: 10px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.08);
   font-family: "Inter", sans-serif;
   padding: 0;
   overflow: hidden;
   position: relative;
-  left: 70vw;
-  bottom: 70vw;
+  left: 75vw;
+  bottom: 194vh;
 }
 
 .title {

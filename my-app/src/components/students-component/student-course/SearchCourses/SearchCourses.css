@@ -1,17 +1,18 @@
 .sc-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
-  width: 100%;
+  align-items: center;
+  margin-top: 50px auto;
+  width: fit-content;
+  height: fit-content;
   min-height: 45vw;
   position: relative;
-  bottom: 25vw;
-  right: 5vw;
-
+  bottom: 97vh;
+  left: 25.5vw;
 }
 
 .sc-card {
-background: #e7eaf6; 
+  background: #e7eaf6;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 24px;
@@ -90,7 +91,7 @@ background: #e7eaf6;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 16px;
-  background: #d2d4ea; 
+  background: #d2d4ea;
 }
 
 .sc-item-left {

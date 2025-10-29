@@ -1,13 +1,13 @@
 /* Container */
 .dashboard-container {
   padding: 32px;
-  font-family: 'Inter', Arial, sans-serif;
- 
+  font-family: "Inter", Arial, sans-serif;
+
   height: auto;
   width: 70vw;
   position: relative;
-  top: 2vw;
-  left:  22vw;
+  bottom: 40vh;
+  left: 22vw;
 }
 
 /* Header */
@@ -20,10 +20,10 @@
 }
 
 .header-subtitle {
- font-size: 0.1rem;
+  font-size: 0.1rem;
   margin-top: 20px;
-    position: relative;
-    left: 15%;
+  position: relative;
+  left: 15%;
 }
 
 /* Grid */
@@ -36,9 +36,9 @@
 
 /* Card */
 .card {
-  background-color: #E5EAF6;
+  background-color: #e5eaf6;
   border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
@@ -67,10 +67,18 @@
   height: 26px;
 }
 
-.blue { color: #2563eb; }
-.green { color: #16a34a; }
-.purple { color: #7c3aed; }
-.orange { color: #f97316; }
+.blue {
+  color: #2563eb;
+}
+.green {
+  color: #16a34a;
+}
+.purple {
+  color: #7c3aed;
+}
+.orange {
+  color: #f97316;
+}
 
 .badge {
   font-size: 0.625rem;
@@ -80,9 +88,21 @@
   white-space: nowrap;
 }
 
-.badge.blue { background-color: #dbeafe; color: #2563eb; margin-left: 5vw; }
-.badge.green { background-color: #dcfce7; color: #16a34a; margin-left: 5vw;  }
-.badge.red { background-color: #fee2e2; color: #b91c1c; margin-left: 5vw;  }
+.badge.blue {
+  background-color: #dbeafe;
+  color: #2563eb;
+  margin-left: 5vw;
+}
+.badge.green {
+  background-color: #dcfce7;
+  color: #16a34a;
+  margin-left: 5vw;
+}
+.badge.red {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  margin-left: 5vw;
+}
 
 /* Headings & Text */
 h2 {

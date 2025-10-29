@@ -1,8 +1,7 @@
 .create-course {
-    position: relative;
-   
-    left :20vw;
- 
+  position: relative;
+  bottom: 40vh;
+  left: 22vw;
   width: 70%;
   max-width: none;
   margin: 0;
@@ -11,29 +10,27 @@
 .course-header {
   margin-bottom: 30px;
   text-align: center;
- 
 }
 
 .course-header h1 {
   color: #2c3e50;
   margin-bottom: 8px;
   font-size: 2.2rem;
-   margin-left: 20vw;
+  margin-left: 20vw;
 }
 
 .course-header p {
   color: #7f8c8d;
   font-size: 1.1rem;
-   position: relative;
-   top:100px;
-   right: 20vw;
+  position: relative;
+  top: 100px;
+  right: 20vw;
 }
 
 .course-form {
-  
   border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
   margin: 0 auto;
 }
@@ -48,7 +45,7 @@
   padding: 30px;
   border: 1px solid #e9ecef;
   border-radius: 8px;
-  background:  rgb(213, 219, 233);
+  background: rgb(213, 219, 233);
   width: 100%;
 }
 
@@ -64,7 +61,7 @@
   margin-top: -45px;
   margin-left: -15px;
   margin-right: -15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Three-column grid for form elements */
@@ -74,19 +71,16 @@
   gap: 25px;
   align-items: start;
   width: 100%;
- 
 }
 
 /* Full-width form groups for specific sections */
 .form-group-full {
   grid-column: 1 / -1;
   margin-bottom: 0;
-  
 }
 
 .form-group {
   margin-bottom: 0;
- 
 }
 
 .form-group label {
@@ -131,7 +125,6 @@
   background-position: right 16px center;
   background-size: 12px;
 }
-
 
 /* Buttons */
 .btn {
@@ -189,7 +182,7 @@
   max-width: 50%;
   border-radius: 20px;
   position: relative;
-  left:13vw;
+  left: 13vw;
 }
 
 .btn-add:hover {
@@ -243,11 +236,11 @@
   .course-form {
     padding: 50px;
   }
-  
+
   .form-grid {
     gap: 30px;
   }
-  
+
   .form-section {
     padding: 35px;
   }
@@ -266,33 +259,33 @@
   .create-course {
     padding: 15px;
   }
-  
+
   .course-form {
     padding: 25px;
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .form-section {
     padding: 20px;
   }
-  
+
   .prerequisite-input {
     grid-template-columns: 1fr;
   }
-  
+
   .objective-item {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .btn {
     width: 100%;
   }
@@ -317,7 +310,7 @@
 /* Hover effects for form sections */
 .form-section:hover {
   border-color: #3498db;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Ensure full width utilization */

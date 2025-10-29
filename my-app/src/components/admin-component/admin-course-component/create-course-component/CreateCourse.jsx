@@ -1,93 +1,89 @@
-import React, { useState } from 'react';
-import './create-course.css';
-import {programs,courses} from '../../../../data/Admin-mock-data';
+import React, { useState } from "react";
+import "./create-course.css";
+import { programs, courses } from "../../../../data/Admin-mock-data";
 
 const CreateCourse = () => {
- const [courseData, setCourseData] = useState({
-    courseName: '',
-    courseCode: '',
-    description: '',
-    instructor: '',
-    startDate: '',
-    endDate: '',
+  const [courseData, setCourseData] = useState({
+    courseName: "",
+    courseCode: "",
+    description: "",
+    instructor: "",
+    startDate: "",
+    endDate: "",
     credits: 3,
     maxStudents: 30,
-    department: 'Software Development',
-    level: '',
-    status: 'active',
+    department: "Software Development",
+    level: "",
+    status: "active",
     prerequisites: [],
-    learningObjectives: [''],
-    syllabus: '',
-    fee: 0
+    learningObjectives: [""],
+    syllabus: "",
+    fee: 0,
   });
- 
 
- 
- const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
-    setCourseData(prev => ({
+    setCourseData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? parseInt(value) : value
+      [name]: type === "number" ? parseInt(value) : value,
     }));
   };
 
-  
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  // Map local state to original course structure
-  const submitData = {
-    id: courses.length + 1, // auto increment
-    code: courseData.courseCode,
-    name: courseData.courseName,
-    description: courseData.description,
-    credits: courseData.credits,
-    instructor: courseData.instructor,
-    programId: programs.find(p => p.name === courseData.department)?.id || 0,
-    term: courseData.level, // or another field if needed
-    enrolledStudents: 0,
-    maxStudents: courseData.maxStudents,
-    status: courseData.status,
-    startDate: courseData.startDate,
-    endDate: courseData.endDate,
-    schedule: '', // optional
-    prerequisites: courseData.prerequisites || []
+    // Map local state to original course structure
+    const submitData = {
+      id: courses.length + 1, // auto increment
+      code: courseData.courseCode,
+      name: courseData.courseName,
+      description: courseData.description,
+      credits: courseData.credits,
+      instructor: courseData.instructor,
+      programId:
+        programs.find((p) => p.name === courseData.department)?.id || 0,
+      term: courseData.level, // or another field if needed
+      enrolledStudents: 0,
+      maxStudents: courseData.maxStudents,
+      status: courseData.status,
+      startDate: courseData.startDate,
+      endDate: courseData.endDate,
+      schedule: "", // optional
+      prerequisites: courseData.prerequisites || [],
+    };
+
+    try {
+      console.log("Submitting course data:", submitData);
+      courses.push(submitData); // push mapped object
+      alert("Course created successfully!");
+      handleReset(); // reset form
+    } catch (error) {
+      alert("Error creating course. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  try {
-    console.log('Submitting course data:', submitData);
-    courses.push(submitData); // push mapped object
-    alert('Course created successfully!');
-    handleReset(); // reset form
-  } catch (error) {
-    alert('Error creating course. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
 
   const handleReset = () => {
     setCourseData({
-      courseName: '',
-      courseCode: '',
-      description: '',
-      instructor: '',
-      startDate: '',
-      endDate: '',
+      courseName: "",
+      courseCode: "",
+      description: "",
+      instructor: "",
+      startDate: "",
+      endDate: "",
       credits: 3,
       maxStudents: 30,
-      department: '',
-      level: 'Diploma',
-      status: 'active',
+      department: "",
+      level: "Diploma",
+      status: "active",
       prerequisites: [],
-      learningObjectives: [''],
-      syllabus: '',
-      fee: 0
+      learningObjectives: [""],
+      syllabus: "",
+      fee: 0,
     });
   };
 
@@ -157,7 +153,9 @@ const CreateCourse = () => {
                   className="form-input"
                 >
                   <option value="">Select Department</option>
-                  <option value="Software Development" >Software Development</option>
+                  <option value="Software Development">
+                    Software Development
+                  </option>
                   <option value="mathematics">Mathematics</option>
                   <option value="physics">Physics</option>
                   <option value="business">Business</option>
@@ -191,10 +189,10 @@ const CreateCourse = () => {
                   className="form-input"
                 >
                   {programs.map((program, index) => (
-                      <option key={index} value={program.name}>
-                        {program.name}
-                      </option>
-                    ))}
+                    <option key={index} value={program.name}>
+                      {program.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -278,14 +276,10 @@ const CreateCourse = () => {
             </div>
           </div>
 
-         <button className='btn-add' disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Add'}
-        </button>
-          
-         
+          <button className="btn-add" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Add"}
+          </button>
         </div>
-
-        
       </form>
     </div>
   );

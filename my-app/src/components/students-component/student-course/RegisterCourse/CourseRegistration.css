@@ -4,7 +4,7 @@
   padding: 30px;
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -73,7 +73,8 @@
   font-size: 14px;
 }
 
-.course-list, .registered-courses {
+.course-list,
+.registered-courses {
   margin-bottom: 25px;
 }
 

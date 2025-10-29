@@ -1,28 +1,25 @@
 /* messages-view.css */
- .message-view{
-  width: 60vw;
+.message-view {
+  width: max-content;
   position: relative;
-  top:0;
-  left:25vw;
+  bottom: 35vh;
+  left: 25vw;
+}
 
- 
- }
- .message-view-header{
+.message-view-header {
   position: relative;
   left: 3vw;
-  
- }
+}
 
-  .message-view-header > p{
+.message-view-header > p {
   position: relative;
   left: 5vw;
-
- }
+}
 .messages-container {
   display: grid;
   grid-template-columns: 400px 1fr;
   gap: 20px;
-  height:auto;;
+  height: auto;
   margin-top: 20px;
 }
 
@@ -50,20 +47,16 @@
 .sort-info {
   font-size: 0.8rem;
   color: #666;
-  
 }
-.Search-box .search-input{
+.Search-box .search-input {
   width: 26vw;
   height: 40px;
-
 }
-
 
 .messages-scroll {
   flex: 1;
   overflow-y: auto;
   max-height: calc(100vh - 400px);
- 
 }
 
 /* Message Items in List */
@@ -72,7 +65,6 @@
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
   transition: background-color 0.2s;
-
 }
 
 .message-item:hover {
@@ -122,15 +114,12 @@
   gap: 10px;
   font-size: 0.8rem;
   color: #666;
-
-  
 }
 
 .message-subject {
   font-weight: 500;
   margin-bottom: 8px;
   font-size: 0.9rem;
-    
 }
 
 .message-preview {
@@ -151,7 +140,9 @@
   gap: 5px;
 }
 
-.status-tag, .attachment-tag, .response-tag {
+.status-tag,
+.attachment-tag,
+.response-tag {
   padding: 2px 6px;
   border-radius: 10px;
   font-size: 0.7rem;
@@ -168,7 +159,8 @@
   color: #2e7d32;
 }
 
-.attachment-tag, .response-tag {
+.attachment-tag,
+.response-tag {
   background: #f0f0f0;
   color: #666;
 }
@@ -196,7 +188,7 @@
   align-items: flex-start;
   padding: 20px;
   border-bottom: 1px solid #e1e5e9;
-  background:  #a1a1e4;
+  background: #a1a1e4;
 }
 
 .detail-subject {
@@ -416,7 +408,7 @@
   .messages-container {
     grid-template-columns: 1fr;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }

@@ -1,11 +1,15 @@
 .contact-admin {
   max-width: 650px;
+  height: fit-content;
   margin: 40px auto;
   padding: 25px;
   border-radius: 12px;
   background: rgb(237, 244, 242);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid black;
+  position: relative;
+  bottom: 40vh;
 }
 
 .contact-admin h3 {

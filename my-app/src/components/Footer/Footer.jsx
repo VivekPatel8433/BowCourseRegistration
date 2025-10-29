@@ -6,13 +6,13 @@ function Footer() {
     <footer className="bg-gray-900 text-white py-16">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-             <h4 className="text-lg font-bold mb-4">Programs</h4>
-              <ul className="space-y-4 text-gray-400">
-                <li>Diploma</li>
-                <li>Post Diploma</li>
-                <li>Certificate</li>
-              </ul>
+          <div>
+            <h4 className="text-lg font-bold mb-4">Programs</h4>
+            <ul className="space-y-4 text-gray-400">
+              <li>Diploma</li>
+              <li>Post Diploma</li>
+              <li>Certificate</li>
+            </ul>
           </div>
           <div>
             <h4 className="text-lg font-bold mb-4">Support</h4>
@@ -44,13 +44,9 @@ function Footer() {
         <div className="border-t mt-8 pt-8 text-center">
           <p>@2025 Bow Course Registration System. All Rights Reserved</p>
         </div>
-          
       </div>
 
-
-
-      
-      <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-slate-500">
+      <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-slate-500 text-center">
         © {new Date().getFullYear()} Bow Course. All rights reserved.
       </div>
     </footer>

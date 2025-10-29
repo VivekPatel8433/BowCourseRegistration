@@ -1,5 +1,5 @@
 .side-nav {
-  position: fixed;
+  position: relative;
   top: 90px; /* below top header */
   left: 0;
   width: 300px;
@@ -37,7 +37,7 @@
 }
 
 .side-link.active {
-  background-color: #e0e7ff; 
+  background-color: #e0e7ff;
   color: #2563eb;
   font-weight: bold;
 }
