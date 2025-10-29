@@ -5,6 +5,10 @@
   padding: 20px;
   width: 70%;
   margin: 0;
+
+  height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .student-management-header {
