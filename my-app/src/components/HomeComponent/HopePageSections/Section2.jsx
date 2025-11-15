@@ -30,7 +30,10 @@ export default function Section2() {
                 </div>
                 <div className="feature">
                   <span className="feature-icon">💲</span>
-                  <span>{program.fees.domestic} Domestic / {program.fees.international} International</span>
+                <span>
+                 {program.fees?.domestic ?? "N/A"} Domestic / International {program.fees?.international ?? "N/A"}
+                </span>
+
                 </div>
                 <div className="feature">
                   <span className="feature-icon">📅</span>
