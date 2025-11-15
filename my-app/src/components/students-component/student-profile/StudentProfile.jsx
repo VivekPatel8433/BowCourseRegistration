@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./StudentProfile.css";
-import { student } from "../../../data/students";
+import { students } from "../../../data/students";
 
 const StudentProfile = () => {
-  const [profile, setProfile] = useState(student);
+  const [profile, setProfile] = useState(students);
   const [isEditing, setIsEditing] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profile.photo);
   const [saveClicked, setSaveClicked] = useState(false); // track when save is clicked
