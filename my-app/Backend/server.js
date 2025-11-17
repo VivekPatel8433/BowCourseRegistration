@@ -9,6 +9,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(cors({
+  origin: " http://localhost:3000", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Connect to MongoDB
@@ -21,10 +27,5 @@ app.get("/", (req, res) => {
     res.send("API running...");
 });
 
-app.use(cors({
-  origin: " http://localhost:3000", 
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
