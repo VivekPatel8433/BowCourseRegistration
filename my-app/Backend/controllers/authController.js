@@ -1,28 +1,28 @@
-import userSchema from "../models/user";
+import User from "../models/user.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
-// SignUp/ Login Controller with password hash and JWT. 
-export const signup = async (req, res) => {
+// Signup/ Login Controller with password hash and JWT. 
+const register = async (req, res) => {
 
     try {
        const { firstName, lastName, email, username, password, role, studentData } = req.body;
 
-       if (!email || !password || !firstName || !lastName || !username || !role) {
+       if (!email || !password || !role) {
        return res.status(400).json({message: "Please provide all required fields"})
       }
 
       // Check if user already exists
-    const existingUser = await userSchema.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already in use" });
     }
 
      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new userSchema({
+    const newUser = new User({
           firstName,
           lastName,
           email,
@@ -52,3 +52,5 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
+
+export default register;

@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
+import axios from "axios"
 
 function strengthLabel(score) {
   if (score >= 4) return "Strong";
@@ -113,27 +114,54 @@ export default function Signup({ onSignup }) {
     return "";
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    const msg = validate();
-    if (msg) return setError(msg);
+ async function handleSubmit(e) {
+  e.preventDefault();
+  const msg = validate();
+  if (msg) return setError(msg);
 
-    const user = { 
-      firstName: form.firstName.trim(),
-      lastName: form.lastName.trim(),
-      email: form.email.trim(),
+  // Prepare data to send to backend
+  const payload = {
+    firstName: form.firstName.trim(),
+    lastName: form.lastName.trim(),
+    email: form.email.trim(),
+    username: form.username.trim(),
+    password: form.password,
+    role: userType,  // "student" or "admin"
+    studentData: userType === "student" ? {
       phone: form.phone,
       birthday: form.birthday,
       department: form.department,
       program: form.program,
-      username: form.username.trim(),
-      userType: userType,
-      photo: ""
-    };
-    onSignup?.(user);
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    } : null
+  };
+
+  try {
+    const res = await axios.post(
+      "http://localhost:3001/api/auth/register",
+      payload
+    );
+
+    console.log("Registration success:", res.data);
+
+    // Store JWT token if backend returns it
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+    }
+
+    // Redirect to login
     navigate("/Home/login", { replace: true });
+
+  } catch (err) {
+    console.error(err);
+
+    if (err.response?.data?.message) {
+      setError(err.response.data.message);
+    } else {
+      setError("Something went wrong. Please try again.");
+    }
   }
+}
+
 
   // Format phone number as user types
   function formatPhoneNumber(value) {
