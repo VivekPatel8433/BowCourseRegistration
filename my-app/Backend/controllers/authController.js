@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
 // Signup/ Login Controller with password hash and JWT. 
-const register = async (req, res) => {
+export const register = async (req, res) => {
 
     try {
        const { firstName, lastName, email, username, password, role, studentData } = req.body;
@@ -53,4 +53,27 @@ const register = async (req, res) => {
   }
 }
 
-export default register;
+// Login
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Email not found" });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ message: "Invalid password" });
+
+    const token = jwt.sign(
+      { id: user._id, userType: user.userType },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({ message: "Login success", token, user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+

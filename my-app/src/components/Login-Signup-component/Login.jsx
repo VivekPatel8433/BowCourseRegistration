@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Login.css";
 
-export default function Login({ user }) {
+export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: user?.email?? "", password: "", remember: true });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    remember: true
+  });
+
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState("");
-    const currentUser = JSON.parse(localStorage.getItem("currentUser")); 
-     
+
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
@@ -20,19 +25,42 @@ export default function Login({ user }) {
     return "";
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const msg = validate();
     if (msg) return setError(msg);
-    if(currentUser.email !==form.email){setError("Invalid login") ;return}
-    if(currentUser?.userType ==="student"||'')navigate("/student", { replace: true });
-      else navigate("/admin", { replace: true });
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/api/auth/login",
+        {
+          email: form.email,
+          password: form.password
+        },
+        { withCredentials: true } // optional, depending on JWT storage
+      );
+
+      // Save token & user data
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("currentUser", JSON.stringify(res.data.user));
+
+      // Redirect based on role
+      if (res.data.user.role === "student") {
+        navigate("/student", { replace: true });
+      } else {
+        navigate("/admin", { replace: true });
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Invalid email or password.");
+    }
   }
 
   return (
     <div className="login-container">
       <div className="login-wrapper">
-        
 
         <div className="login-form-wrapper">
           <div className="login-card">
@@ -42,6 +70,7 @@ export default function Login({ user }) {
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit} className="login-form">
+
               <div className="form-group">
                 <label>Email</label>
                 <input
@@ -66,11 +95,10 @@ export default function Login({ user }) {
                     placeholder="••••••••"
                     autoComplete="current-password"
                     required
-                    minLength={6}
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPwd((s) => !s)}
+                    onClick={() => setShowPwd((p) => !p)}
                     className="toggle-password"
                   >
                     {showPwd ? "Hide" : "Show"}
@@ -96,9 +124,11 @@ export default function Login({ user }) {
               <button type="submit" className="login-btn">
                 Sign in
               </button>
+
             </form>
           </div>
         </div>
+
       </div>
     </div>
   );
