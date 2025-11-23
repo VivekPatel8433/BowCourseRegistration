@@ -1,6 +1,6 @@
 // scripts/populateCourses.js
 import mongoose from 'mongoose';
-import { Course, Program } from './models/AdminData.js';
+import { Course, Program } from './models/AdminModel.js';
 import User from './models/user.js'
 
 // Sample course data from your SQL export

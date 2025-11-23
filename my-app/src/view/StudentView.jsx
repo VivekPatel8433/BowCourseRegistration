@@ -8,10 +8,16 @@ import { StudentProvider } from "../context/StudentContext";
 export default function StudentView() {
   return (
     <StudentProvider>
-      <TopNav />
-      <SideNav />
-      <Outlet />
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <TopNav />
+        <div className="flex flex-1">
+          <SideNav />
+          <main className="flex-1 p-6 bg-gray-50">
+            <Outlet />
+          </main>
+        </div>
+        <Footer />
+      </div>
     </StudentProvider>
   );
 }

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./StudentProfile.css";
 import { students } from "../../../data/students";
 
 const StudentProfile = () => {
   const [profile, setProfile] = useState(students);
   const [isEditing, setIsEditing] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profile.photo);
-  const [saveClicked, setSaveClicked] = useState(false); // track when save is clicked
+  const [saveClicked, setSaveClicked] = useState(false);
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -26,21 +25,18 @@ const StudentProfile = () => {
   const handleEditToggle = () => setIsEditing(!isEditing);
 
   const handleSave = (e) => {
-    e.preventDefault(); // prevent form submission
-    setSaveClicked(true); // trigger effect
+    e.preventDefault();
+    setSaveClicked(true);
   };
 
-  // useEffect to handle actual saving
   useEffect(() => {
     if (saveClicked) {
       localStorage.setItem("currentUser", JSON.stringify(profile));
       setIsEditing(false);
-      setSaveClicked(false); // reset
-   
+      setSaveClicked(false);
     }
   }, [saveClicked, profile]);
 
-  // initialize profile from currentUser
   useEffect(() => {
     if (!currentUser) return;
 
@@ -70,34 +66,33 @@ const StudentProfile = () => {
   ];
 
   return (
-    <div className="student-profile">
-      <h2>Student Profile</h2>
-      <form>
-        <div className="profile-photo">
-          <img
-            src={photoPreview || "https://via.placeholder.com/150?text=No+Photo"}
-            alt="Profile"
-          />
-          {isEditing && (
-            <input type="file" accept="image/*" onChange={handlePhotoChange} />
-          )}
-        </div>
+    <div className="max-w-2xl mx-auto my-10 p-6">
+    <h2 className="text-2xl font-bold mb-6 ml-32">Student Profile</h2>
 
-        <div className="profile-info">
-          <div className="readonly-section">
-            <h3>Student Information</h3>
+      <form>
+        
+        {/* Profile Info */}
+        <div className="space-y-6">
+          {/* Readonly Section */}
+          <div className="p-5 border border-gray-300 rounded-lg bg-gray-50">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800 border-b border-gray-300 pb-2">
+              Student Information
+            </h3>
             {readonlyFields.map(({ label, name }) => (
-              <div key={name} className="readonly-field">
-                <span className="label">{label}:</span>
-                <span className="value">{profile[name]}</span>
+              <div key={name} className="flex gap-4 py-2 border-b border-gray-200 last:border-b-0">
+                <span className="font-medium text-gray-600 w-32">{label}:</span>
+                <span className="text-gray-800 flex-1 text-left">{profile[name]}</span>
               </div>
             ))}
           </div>
 
-          <div className="editable-section">
+          {/* Editable Section */}
+          <div className="bg-gray-50 p-5 rounded-lg">
             {editableFields.map(({ label, name, type }) => (
-              <label key={name}>
-                <span>{label}:</span>
+              <label key={name} className="flex items-center mb-4">
+                <span className="font-medium text-gray-600 w-32 mb-0">
+                  {label}:
+                </span>
                 <input
                   type={type}
                   name={name}
@@ -105,24 +100,38 @@ const StudentProfile = () => {
                   onChange={handleChange}
                   disabled={!isEditing}
                   required={isEditing}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
                 />
               </label>
             ))}
           </div>
         </div>
 
-        <div className="profile-actions">
+        {/* Actions */}
+        <div className="mt-6 text-center">
           {isEditing ? (
-            <>
-              <button type="button" onClick={handleSave}>
+            <div className="space-x-4">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+              >
                 Save
               </button>
-              <button type="button" onClick={handleEditToggle}>
+              <button
+                type="button"
+                onClick={handleEditToggle}
+                className="px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+              >
                 Cancel
               </button>
-            </>
+            </div>
           ) : (
-            <button type="button" onClick={handleEditToggle}>
+            <button
+              type="button"
+              onClick={handleEditToggle}
+              className="px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+            >
               Edit Profile
             </button>
           )}

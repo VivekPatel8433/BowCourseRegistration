@@ -5,19 +5,20 @@ import router from "./routes/authRoutes.js";
 import cors from "cors";
 import courseRouter from './routes/courseRoutes.js';
 import programRouter from './routes/programRoutes.js';
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: " http://localhost:3001", 
+  origin: " http://localhost:3000", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
 app.use(express.json());
-
+app.use(cookieParser());//parse cookies
 // Connect to MongoDB
 connectDB();
 

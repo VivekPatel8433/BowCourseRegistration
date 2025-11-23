@@ -1,13 +1,14 @@
 .messages-panel {
   width: 350px;
+  height: 810px;
   font-family: "Inter", sans-serif;
   
   border-radius: 10px;
   padding: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   position: relative;
-  left: 68vw;
-  bottom: 55vw;
+  left: 70vw;
+  bottom: 57.5vw;
 }
 
 .messages-list {

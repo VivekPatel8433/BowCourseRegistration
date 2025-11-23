@@ -23,9 +23,9 @@ export const adminAuth = (req, res, next) => {
 
     // Attach decoded token to request
     req.user = user;
-   // console.log("admin",{user})
+    console.log({user})
     // Check role
-    if (user.userType !== "admin") {
+    if (user.role !== "admin") {
       return res.status(403).json({ error: "Admin access required" });
     }
 
