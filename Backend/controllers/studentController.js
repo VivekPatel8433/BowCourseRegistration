@@ -1,4 +1,4 @@
-import { Enrollment, Course, Program } from "../models/AdminData.js";
+import { Enrollment, Course, Program } from "../models/AdminModel.js";
 import StudentMessage from "../models/StudentMessage.js";
 
 export const getMyEnrollments = async (req, res) => {
