@@ -54,7 +54,7 @@ const MessageView = () => {
     const handleInitialMessage = async () => {
       if (!messageId || !messages) return;
 
-      const message = messages.find(msg => msg.id === messageId);
+      const message = messages.find(msg => msg._id === messageId);
       if (message) {
         if (message.status === 'unread') {
           handleSelectMessage(message);
@@ -121,10 +121,7 @@ const MessageView = () => {
     setResponseText(message.response || '');
 
     if (message.status === 'unread') {
-      console.log({markedAsRead:message.id})
-      markMessageAsRead(message.id);
-      await api.patch(`/message/read/${message.id}`);
-      console.log({markedAsRead:message.id})
+      markMessageAsRead(message._id);
     }
   };
 
@@ -139,13 +136,13 @@ const MessageView = () => {
         response: responseText.trim()
       }));
       await api.post(`message/response/${selectedMessage.id}`, {
-        response: responseText.trim()
+        response: responseText.trim()??null
       });
       
       alert('Response sent successfully!');
     } catch (error) {
       console.error('Error sending response:', error);
-      alert('Error sending response. Please try again.');
+     
     } finally {
       setIsResponding(false);
     }
@@ -155,8 +152,8 @@ const MessageView = () => {
     if (window.confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
       try {
         deleteMessage(messageId);
-        await api.delete(`message/${messageId}`);
-        if (selectedMessage && selectedMessage.id === messageId) {
+        await api.delete(`/students/message/${messageId}`);
+        if (selectedMessage && selectedMessage._id === messageId) {
           setSelectedMessage(null);
           setResponseText('');
         }

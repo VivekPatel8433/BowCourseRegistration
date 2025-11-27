@@ -1,14 +1,10 @@
 import React from "react";
 import { useStudent } from "../../../../context/StudentContext";
 export default function RegisteredCourses({ registeredCourses, onRemoveCourse }) {
-  const { courses } = useStudent();
+  const { enrolledCourses } = useStudent();
 
   // Filter courses that are registered and remove duplicates
-  const filteredCourses = courses
-    ?.filter((c) => registeredCourses.includes(c.code))
-    ?.filter((value, index, self) =>
-      index === self.findIndex((t) => t.code === value.code)
-    );
+  console.log("fetched coures",{enrolledCourses} )
   return (
    <div className="font-['Inter',Arial,sans-serif] p-5 relative -top-1 left-5 w-96">
       <div className="w-[520px] bg-indigo-100 rounded-xl shadow-sm border border-gray-100 border-opacity-10 p-5 min-h-96">
@@ -47,14 +43,14 @@ export default function RegisteredCourses({ registeredCourses, onRemoveCourse })
             <h3 className="text-lg font-bold text-gray-900 m-0">Registered Courses</h3>
           </div>
           <span className="text-sm bg-indigo-100 text-gray-700 px-3 py-1.5 rounded-full">
-            {filteredCourses?.length}/5 courses
+            {enrolledCourses?.length}/5 courses
           </span>
         </div>
 
         {/* Course List */}
         <div className="flex flex-col gap-3.5">
-          {filteredCourses?.length > 0 ? (
-            filteredCourses.map((course) => (
+          {enrolledCourses?.length > 0 ? (
+            enrolledCourses.map((course) => (
               <div key={course.code} className="bg-indigo-300 rounded-lg p-4 flex justify-between items-center shadow-sm border border-gray-900 border-opacity-5">
                 <div className="flex flex-col gap-1.5">
                   <span className="font-bold text-gray-900 text-base">{course.code}</span>
@@ -63,7 +59,7 @@ export default function RegisteredCourses({ registeredCourses, onRemoveCourse })
                 <button 
                   className="bg-transparent border-none cursor-pointer rounded p-1 hover:bg-red-500 hover:bg-opacity-20 transition-colors"
                   aria-label="Remove course" 
-                  onClick={() => onRemoveCourse(course.code)}
+                  onClick={() => onRemoveCourse(course._id)}
                 >
                   <svg
                     width="18"
@@ -88,7 +84,7 @@ export default function RegisteredCourses({ registeredCourses, onRemoveCourse })
           )}
 
           {/* Add Course Button */}
-           {filteredCourses?.length < 5 && (
+           {enrolledCourses?.length < 5 && (
           <button className="mt-1.5 rounded-lg p-4 border-2 border-dashed border-gray-300 border-opacity-30 flex items-center gap-3 text-gray-700 text-sm bg-transparent cursor-pointer transition-all hover:bg-gray-50 hover:border-gray-400 hover:border-opacity-40">
             <span className="w-8 h-8 rounded grid place-items-center bg-gray-900 bg-opacity-10 font-bold text-lg">
               +

@@ -3,22 +3,15 @@ import { useStudent } from "../../../../context/StudentContext";
 
 
 export default function SearchCourses({onRegister}) {
-  const { selectedTerm,courses } = useStudent(); 
+  const { selectedTerm,courses ,studentInfo} = useStudent(); 
   const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredCourses, setFilteredCourses] = useState([]); 
 
- console.log({courses})
- console.log({selectedTerm})
-  useEffect(() => {
-    const filtered = courses?.filter((c) => c?.term === selectedTerm.replace(/[0-9\s]/g, "")).slice(0, 5);
-    setFilteredCourses(filtered);
-  }, [selectedTerm]);
-
 
   useEffect(() => {
-    if (!searchTerm) {           //str.replace(/[0-9\s]/g, ""); to extract non digit
- 
-      const filtered = courses?.filter((c) => c?.term === selectedTerm.replace(/[0-9\s]/g, ""))
+    if (!searchTerm) {         
+      const filtered = courses?.filter((c) => c.program.name ===studentInfo?.studentData?.program && Array.isArray(c.terms) &&
+          c.terms.includes(selectedTerm))
         .slice(0, 5);
       setFilteredCourses(filtered);
       return;
@@ -30,7 +23,7 @@ export default function SearchCourses({onRegister}) {
         c.code.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredCourses(filtered);
-  }, [searchTerm, selectedTerm]);
+  }, [searchTerm, selectedTerm,studentInfo]);
 
 
 
@@ -115,7 +108,7 @@ export default function SearchCourses({onRegister}) {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      {c.term}
+                      {c.terms.join(',')}
                     </div>
 
                    
@@ -169,7 +162,7 @@ export default function SearchCourses({onRegister}) {
 
                 <button 
                   className="bg-indigo-500 text-white font-medium border-none rounded-lg px-4 py-2 cursor-pointer text-sm h-fit hover:bg-blue-700 transition-colors"
-                  onClick={() => onRegister(c.code)}
+                  onClick={() => onRegister(c._id)}
                 >
                   Register
                 </button>

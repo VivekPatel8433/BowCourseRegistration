@@ -4,21 +4,27 @@ import TermSelection from '../components/students-component/studentTermSelection
 import RegisteredCourses from '../components/students-component/student-course/RegisterCourse/RegisteredCourses';
 import SearchCourses from '../components/students-component/student-course/SearchCourses/SearchCourses';
 import QuickActions from '../components/students-component/QuickActions/QuickActions';
-
+import { useStudent } from "../context/StudentContext";
 export default function StudentPage(){
-  const [registeredCourses, setRegisteredCourses] = useState([]);
+   const [registeredCourses, setRegisteredCourses] = useState([]);
+  const { enroll, unenroll,enrolledCourses } = useStudent();
 
-  const handleRegister = (code) => {
-    setRegisteredCourses((prev) => {
-      if (prev.includes(code)) return prev;
-      return [...prev, code];
-    });
-  };
-  
-  const handleRemoveCourse = (courseCode) => {
-    setRegisteredCourses(prev => prev.filter(code => code !== courseCode));
+   const handleRegister = async (id) => {
+    // avoid duplicate registration
+    console.log("register couours",id)
+    if (registeredCourses.includes(id)) return;
+
+    await enroll(id); // wait for API
+
+    // update state after successful enrollment
+    setRegisteredCourses((prev) => [...prev, id]);
   };
 
+  const handleRemoveCourse = async (id) => {
+    await unenroll(id);
+
+    setRegisteredCourses((prev) => prev.filter((courseId) => courseId !== id));
+  };
   return(
     <div className="min-h-screen p-6 bg-gray-50">
   {/* First Row */}
@@ -35,7 +41,7 @@ export default function StudentPage(){
   {/* Third Row */}
   <div className="grid grid-cols-2 gap-6">
     <SearchCourses onRegister={handleRegister} />
-    <QuickActions progressBar={registeredCourses}/>
+    <QuickActions progressBar={enrolledCourses}/>
   </div>
 </div>
   );

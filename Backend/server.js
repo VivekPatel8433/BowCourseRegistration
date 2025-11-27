@@ -15,11 +15,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: " http://localhost:3001",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: ["http://localhost:3001", "http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());//parse cookies

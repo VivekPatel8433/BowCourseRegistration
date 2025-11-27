@@ -22,20 +22,21 @@ export function AdminProvider({ children }) {
     const fetchInitialData = async () => {
       try {
         const programsRes = await api.get('/programs');
-        console.log({programsRes})
+       // console.log({programsRes})
         setPrograms(programsRes.data.programs ?? []);
         setStudents(programsRes.data.data?.reduce((total, p) => total + p.TotalEnrolledStudents, 0) ?? 0);
       
         await fetchCourses();
         const adminRes = await api.get('/auth/user/loggedIn');
-         console.log({adminRes})
+        // console.log({adminRes})
         setAdmin(adminRes.data.user ?? {});
           setLogin(adminRes.data.user ?? {});
      
 
-        const messagesRes = await api.get('/message');
-        setMessages(messagesRes.data.messages ?? []);
-        setUnreadMessages((messagesRes.data.messages ?? []).filter(msg => msg.status === 'unread'));
+        const messagesRes = await api.get('students/messages');
+        console.log({messagesRes})
+        setMessages(messagesRes.data?? []);
+        setUnreadMessages((messagesRes.data ?? []).filter(msg => msg.status === 'unread'));
       } catch (err) {
         console.error(err);
       }
@@ -57,16 +58,15 @@ export function AdminProvider({ children }) {
 
   // Handle local updates
   useEffect(() => {
-    if (readId) setUnreadMessages(prev => prev.filter(msg => msg.id !== readId));
+    if (readId) setUnreadMessages(prev => prev.filter(msg => msg._id !== readId));
     if (removedCourseId) setCourses(prev => prev.filter(c => c.id !== removedCourseId));
-    if (deletedMessageId) setMessages(prev => prev.filter(m => m.id !== deletedMessageId));
+    if (deletedMessageId) setMessages(prev => prev.filter(m => m._id !== deletedMessageId));
     if (updatedCourse) {
       setCourses(prev => prev.map(c => c.id === updatedCourse.id ? updatedCourse : c));
     }
   }, [readId, removedCourseId, deletedMessageId, updatedCourse]);
 
   // CRUD functions
-  const markMessageAsRead = (id) =>{ setReadId(id);console.log({id})};
   const deleteCourse = (id) => setRemovedCourseId(id);
   const deleteMessage = (id) => setDeletedMessageId(id);
   const updateCourse = (course) => setUpdatedCourse(course);
@@ -78,6 +78,17 @@ export function AdminProvider({ children }) {
       console.error(err);
       throw err;
     }
+  };
+
+   const markMessageAsRead = async(id) =>{ 
+    try {
+      const res= await api.patch(`/students/message/${id}`);
+     setReadId(id)
+  
+    } catch (error) {
+      console.error(error.messages)
+    }
+   
   };
 const updateAdmin = (updates) => {
   setAdmin((prev) => ({ ...prev, ...updates }));

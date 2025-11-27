@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
-import axios from "axios"
+import api from "../../services/api"
 
 function strengthLabel(score) {
   if (score >= 4) return "Strong";
@@ -51,12 +51,9 @@ export default function Signup({ onSignup }) {
 
   // Program options based on SD department
   const programOptions = [
-    "Software Development",
-    "Web Development", 
-    "Mobile Development",
-    "Data Science",
-    "Cloud Computing",
-    "Cyber Security"
+    "Diploma",
+    "Post-Diploma", 
+    "Certificate"
   ];
 
   function handleChange(e) {
@@ -136,17 +133,14 @@ export default function Signup({ onSignup }) {
   };
 
   try {
-    const res = await axios.post(
-      "http://localhost:3001/api/auth/register",
-      payload
-    );
+    const res = await api.post( "/auth/register",payload );
 
     console.log("Registration success:", res.data);
 
     // Store JWT token if backend returns it
-    if (res.data.token) {
+   /* if (res.data.token) {
       localStorage.setItem("token", res.data.token);
-    }
+    }*/
 
     // Redirect to login
     navigate("/Home/login", { replace: true });

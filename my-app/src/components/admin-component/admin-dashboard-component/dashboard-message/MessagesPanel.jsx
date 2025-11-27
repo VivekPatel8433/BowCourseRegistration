@@ -69,13 +69,13 @@ const MessagesPanel = () => {
       <div className="flex flex-col gap-2.5 mb-4">
         {topMessages?.map((msg) => (
           <div
-            key={msg.id}
+            key={msg._id}
             className={`flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5 transition-all duration-200 hover:bg-gray-100 cursor-pointer ${
               msg.status === "unread" 
                 ? "border border-red-300 bg-red-50" 
                 : ""
             }`}
-            onClick={() => ViewAllMessages(msg.id)}
+            onClick={() => ViewAllMessages(msg._id)}
           >
             <img 
               src={msg.img ?? imagePlaceHolder} 

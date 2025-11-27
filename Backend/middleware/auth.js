@@ -30,7 +30,7 @@ export const adminAuth = (req, res, next) => {
       return res.status(403).json({ error: "Admin access required" });
     }
 
-    console.log({ user });
+   // console.log({ user });
     next();
   });
 };

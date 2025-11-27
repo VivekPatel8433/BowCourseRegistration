@@ -90,8 +90,9 @@ const DashboardCards = () => {
    useEffect(() => {
   const fetchStudentData = async () => {
     try {
-      const res = await api.get(""); // replace with your data and api
-      setStudentInfo(res.data);
+      const res = await api.get("/auth/user/loggedIn");
+      console.log(res)
+      setStudentInfo(res.data.user);
      
       // Update cards dynamically
       cards[1].value = res?.data?.deptName || cards[1].value;

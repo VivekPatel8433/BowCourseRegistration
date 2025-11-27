@@ -191,13 +191,13 @@ export default async function populateCourses() {
       // Find the actual program ObjectId
       let programId;
       if (course.programId === 1) {
-        const program = await Program.findOne({ code: 'SD1' }); // Adjust based on your program codes
+        const program = await Program.findOne({ code: 'DIP' }); // Adjust based on your program codes
         programId = program?._id;
       } else if (course.programId === 2) {
-        const program = await Program.findOne({ code: 'SD2' }); // Adjust based on your program codes
+        const program = await Program.findOne({ code: 'PDP' }); // Adjust based on your program codes
         programId = program?._id;
       } else if (course.programId === 3) {
-        const program = await Program.findOne({ code: 'SD3' }); // Adjust based on your program codes
+        const program = await Program.findOne({ code: 'CERT' }); // Adjust based on your program codes
         programId = program?._id;
       }
 
