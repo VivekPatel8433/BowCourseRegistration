@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from "react";
-import "./SearchCourses.css";
-import { programs, courses } from "../../../../data/Admin-mock-data";
 import { useStudent } from "../../../../context/StudentContext";
 
+
 export default function SearchCourses({onRegister}) {
-  const { selectedTerm } = useStudent(); 
+  const { selectedTerm,courses } = useStudent(); 
   const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredCourses, setFilteredCourses] = useState([]); 
-   
 
+ console.log({courses})
+ console.log({selectedTerm})
   useEffect(() => {
-    const filtered = courses
-      .filter((c) => c.term === selectedTerm)
-      .slice(0, 5);
+    const filtered = courses?.filter((c) => c?.term === selectedTerm.replace(/[0-9\s]/g, "")).slice(0, 5);
     setFilteredCourses(filtered);
   }, [selectedTerm]);
 
 
   useEffect(() => {
-    if (!searchTerm) {
+    if (!searchTerm) {           //str.replace(/[0-9\s]/g, ""); to extract non digit
  
-      const filtered = courses
-        .filter((c) => c.term === selectedTerm)
+      const filtered = courses?.filter((c) => c?.term === selectedTerm.replace(/[0-9\s]/g, ""))
         .slice(0, 5);
       setFilteredCourses(filtered);
       return;
     }
 
-    const filtered = courses.filter(
+    const filtered = courses?.filter(
       (c) =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.code.toLowerCase().includes(searchTerm.toLowerCase())
@@ -36,11 +33,13 @@ export default function SearchCourses({onRegister}) {
   }, [searchTerm, selectedTerm]);
 
 
+
   return (
-    <div className="sc-wrapper">
-      <div className="sc-card">
-        <div className="sc-header">
-          <div className="sc-title">
+  <div className="w-[110%] min-w-96 max-w-6xl relative top-4 left-4 ml-10">
+      <div className="bg-indigo-100 rounded-xl shadow-sm border border-gray-200 p-6 w-full">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
             <svg
               width="20"
               height="20"
@@ -56,19 +55,20 @@ export default function SearchCourses({onRegister}) {
                 strokeLinejoin="round"
               />
             </svg>
-            <h3>Search Courses</h3>
+            <h3 className="m-0 text-lg text-gray-900">Search Courses</h3>
           </div>
         </div>
 
-        <div className="sc-searchbar">
+        {/* Search Bar */}
+        <div className="flex items-center gap-2.5 mt-5 mb-5">
           <input
             type="text"
             placeholder="Search by course name or code..."
-            className="sc-input"
+            className="flex-1 px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="sc-search-btn" aria-label="Search">
+          <button className="bg-blue-600 border-none rounded-lg p-2.5 cursor-pointer flex items-center justify-center hover:bg-blue-700 transition-colors" aria-label="Search">
             <svg
               width="18"
               height="18"
@@ -87,18 +87,19 @@ export default function SearchCourses({onRegister}) {
           </button>
         </div>
 
-        <div className="sc-list">
-          {filteredCourses.length > 0 ? (
+        {/* Course List */}
+        <div className="flex flex-col gap-3">
+          {filteredCourses?.length > 0 ? (
             filteredCourses.map((c) => (
-              <div key={c.code} className="sc-item">
-                <div className="sc-item-left">
-                  <div className="course-code">
+              <div key={c.code} className="flex justify-between items-start border border-gray-200 rounded-lg p-4 bg-indigo-300">
+                <div className="flex flex-col gap-1.5">
+                  <div className="font-semibold text-gray-900">
                     {c.code} - {c.name}
                   </div>
-                  <div className="course-desc">{c.description}</div>
+                  <div className="text-gray-600 text-sm">{c.description}</div>
 
-                  <div className="course-meta">
-                    <div className="meta">
+                  <div className="flex items-center gap-5 mt-1.5 text-gray-500 text-xs">
+                    <div className="flex items-center gap-1">
                       <svg
                         width="14"
                         height="14"
@@ -117,6 +118,7 @@ export default function SearchCourses({onRegister}) {
                       {c.term}
                     </div>
 
+                   
                     <div className="meta">
                       <svg
                         width="14"
@@ -140,16 +142,41 @@ export default function SearchCourses({onRegister}) {
                           strokeWidth="1.5"
                         />
                       </svg>
-                      {c.startDate}
+                      {`${new Date(c?.startDate).toLocaleDateString()} - ${new Date(c.endDate).toLocaleDateString()}`}
                     </div>
+                    <div className="course-meta">
+                    <div className="meta">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2v20M2 12h20"
+                          stroke="#6b7280"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span>{c.credit} Credits</span>
+                    </div>
+                  </div>
                   </div>
                 </div>
 
-                <button className="add-btn" onClick={()=>onRegister(c.code)}>Register</button>
+                <button 
+                  className="bg-indigo-500 text-white font-medium border-none rounded-lg px-4 py-2 cursor-pointer text-sm h-fit hover:bg-blue-700 transition-colors"
+                  onClick={() => onRegister(c.code)}
+                >
+                  Register
+                </button>
               </div>
             ))
           ) : (
-            <p className="no-courses">No courses found for {selectedTerm}</p>
+            <p className="text-gray-500 text-center py-4">No courses found for {selectedTerm}</p>
           )}
         </div>
       </div>

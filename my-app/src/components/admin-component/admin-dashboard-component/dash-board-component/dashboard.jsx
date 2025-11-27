@@ -1,136 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Mail, BookOpen, Users, GraduationCap } from "lucide-react";
-import "./dashboard.css";
-import { loginInfo, adminData,programs,courses} from "../../../../data/Admin-mock-data";
-import { students } from "../../../../data/students";
-import {messages} from '../../../../data/messages'
-import { useAdmin } from '../../../../context/AdminContext'
-function Card({ children }) {
-  return <div className="card">{children}</div>;
+import { useAdmin } from '../../../../context/AdminContext';
+
+function Card({ children }) { 
+  return (
+    <div className="bg-[#E5EAF6] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 hover:-translate-y-1.5 cursor-pointer">
+      {children}
+    </div>
+  );
 }
 
-function CardContent({ children }) {
-  return <div className="card-content">{children}</div>;
+function CardContent({ children }) { 
+  return (
+    <div className="p-6 flex flex-col items-start">
+      {children}
+    </div>
+  );
 }
 
 export default function Dashboard() {
-  const[login,setLogin]=useState({})
-  const [admin, setAdmin] = useState({});
-  const [programsList, setProgramsList] = useState([]);
-  const [coursesList, setCoursesList] = useState([]);
-  const [studentsList, setStudentsList] = useState([]);
-  const [messagesList, setMessagesList] = useState([]);
-  const [unread,setUnread]=useState([])
-
-
- const { readId, removedCourseId,deletedMessageId} = useAdmin();
-
-  useEffect(() => {
-    setLogin(loginInfo);
-    setAdmin(adminData);
-     
-    // Set other data lists
-    setProgramsList(programs);
-    setCoursesList(courses);
-    setStudentsList(students);
-    setMessagesList(messages);
-     setUnread(messages.filter(msg => msg.status === "unread")); 
-
-  }, []); 
-     // use custome hook
-
-  
-   useEffect(() => {
-  if (!readId && !removedCourseId &&!deletedMessageId) return;
-  
-  if (readId) {
-    setUnread((prev) => prev.filter((m) => m.id !==readId));
-  }
-
-  if (removedCourseId) {
-    setCoursesList((prev) => prev.filter((c) => c.id != removedCourseId));
-  }
-  if(deletedMessageId){
- 
-    setMessagesList((prev) => prev.filter((m) => m.id != deletedMessageId));
-
-  
-  }
-}, [readId, removedCourseId,deletedMessageId]);
-
-
-
-
-
-  useEffect(() => {
-    if (login.id && admin.id && login.id !== admin.id) {
-      console.log("Login and Admin IDs don't match");
-      // Handle the mismatch here
-    }
-  }, [login, admin]); // This runs whenever login or admin changes
-  
-  
-  const programNames = programs.map(p => p.name).join(", ");
-
+  const { admin, programs, courses, students, messages, unreadMessages } = useAdmin();
+  console.log({admin,programs,courses,students,messages,unreadMessages})
+  const programNames = (programs ?? []).map(p => p.name).join(", ");
 
   return (
-    <div className="dashboard-container">
+    <div className="p-8 font-['Inter',Arial,sans-serif] w-full max-w-7xl mx-auto">
       {/* Header */}
-      <div className="header">
-        <h1 className="header-title">Administrator Dashboard</h1>
-        <p className="header-subtitle" style={{fontSize: "1vw",fontWeight:"normal",color:"inherit"}}>
-          Welcome back, {admin.name }! Manage courses and monitor student activities.
+      <div className="mb-10">
+        <h1 className="text-3xl font-medium mb-5">
+          Administrator Dashboard
+        </h1>
+        <p className="text-gray-600 text-lg">
+          {/* Welcome back, {admin?.firstName ?? "Admin"}! Manage courses and monitor student activities. */}
         </p>
       </div>
 
       {/* Cards Grid */}
-      <div className="cards-grid">
-        {/* Total Courses */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Courses Card */}
         <Card>
           <CardContent>
-            <div className="icon-row">
-              <BookOpen className="icon blue" />
-              <span className="badge blue">Active</span>
+            <div className="flex items-center gap-2.5 justify-between w-full">
+              <BookOpen className="w-6 h-6 text-blue-600" />
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-100 text-blue-600">
+                Active
+              </span>
             </div>
-            <h2>Total Courses</h2>
-            <p className="big-number blue">{coursesList.length??0}</p>
-            <p className="small-text">Across all terms</p>
+            <h2 className="mt-4 text-lg font-semibold">Total Courses</h2>
+            <p className="mt-2 text-3xl font-bold text-blue-600">
+              {courses?.length ?? 0}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">Across all terms</p>
           </CardContent>
         </Card>
 
-        {/* Total Students */}
+        {/* Total Students Card */}
         <Card>
           <CardContent>
-            <div className="icon-row">
-              <Users className="icon green" />
-              <span className="badge green">Active</span>
+            <div className="flex items-center gap-2.5 justify-between w-full">
+              <Users className="w-6 h-6 text-green-600" />
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-600">
+                Active
+              </span>
             </div>
-            <h2>Total Students</h2>
-            <p className="big-number green">{studentsList.length??0}</p>
-            <p className="small-text">Enrolled students</p>
+            <h2 className="mt-4 text-lg font-semibold">Total Students</h2>
+            <p className="mt-2 text-3xl font-bold text-green-600">
+              {students ?? 0}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">Enrolled students</p>
           </CardContent>
         </Card>
 
-        {/* Programs */}
+        {/* Programs Card */}
         <Card>
           <CardContent>
-            <GraduationCap className="icon purple" />
-            <h2>Programs</h2>
-            <p className="big-number purple">{programsList.length??0}</p>
-            <p className="small-text">{programNames}</p>
+            <GraduationCap className="w-6 h-6 text-purple-600" />
+            <h2 className="mt-4 text-lg font-semibold">Programs</h2>
+            <p className="mt-2 text-3xl font-bold text-purple-600">
+              {programs?.length ?? 0}
+            </p>
+            <p className="text-sm text-gray-500 mt-1 truncate w-full">
+              {programNames || "No programs"}
+            </p>
           </CardContent>
         </Card>
 
-        {/* Messages */}
+        {/* Messages Card */}
         <Card>
           <CardContent>
-            <div className="icon-row">
-              <Mail className="icon orange" />
-              <span className="badge red">{unread.length??0} New</span>
+            <div className="flex items-center gap-2.5 justify-between w-full">
+              <Mail className="w-6 h-6 text-orange-600" />
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-red-600">
+                {unreadMessages?.length ?? 0} New
+              </span>
             </div>
-            <h2>Messages</h2>
-            <p className="big-number orange" >{messagesList.length??0}</p>
-            <p className="small-text">Student inquiries</p>
+            <h2 className="mt-4 text-lg font-semibold">Messages</h2>
+            <p className="mt-2 text-3xl font-bold text-orange-600">
+              {messages?.length ?? 0}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">Student inquiries</p>
           </CardContent>
         </Card>
       </div>

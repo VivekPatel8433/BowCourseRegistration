@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './create-course.css';
-import {programs,courses} from '../../../../data/Admin-mock-data';
+import { useAdmin } from "../../../../context/AdminContext";
+import api from '../../../../services/api';
 
 const CreateCourse = () => {
- const [courseData, setCourseData] = useState({
+  const [courseData, setCourseData] = useState({
     courseName: '',
     courseCode: '',
     description: '',
@@ -13,63 +13,80 @@ const CreateCourse = () => {
     credits: 3,
     maxStudents: 30,
     department: 'Software Development',
-    level: '',
+    program: '',
     status: 'active',
     prerequisites: [],
     learningObjectives: [''],
     syllabus: '',
-    fee: 0
+    domestic: 0,
+    international: 0,
+    term: []
   });
- 
 
- 
- const [isSubmitting, setIsSubmitting] = useState(false);
+  const { programs, OnCourseCreation } = useAdmin();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
     setCourseData(prev => ({
       ...prev,
-      [name]: type === 'number' ? parseInt(value) : value
+      [name]: type === 'number' ? Number(value) : value
     }));
   };
 
-  
+  const handleCheckboxChange = (e) => {
+    const value = String(e.target.value);
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    setCourseData((prev) => {
+      if (prev.term?.includes(value)) {
+        return {
+          ...prev,
+          term: prev.term?.filter((t) => t !== value)
+        };
+      }
 
-  // Map local state to original course structure
-  const submitData = {
-    id: courses.length + 1, // auto increment
-    code: courseData.courseCode,
-    name: courseData.courseName,
-    description: courseData.description,
-    credits: courseData.credits,
-    instructor: courseData.instructor,
-    programId: programs.find(p => p.name === courseData.department)?.id || 0,
-    term: courseData.level, // or another field if needed
-    enrolledStudents: 0,
-    maxStudents: courseData.maxStudents,
-    status: courseData.status,
-    startDate: courseData.startDate,
-    endDate: courseData.endDate,
-    schedule: '', // optional
-    prerequisites: courseData.prerequisites || []
+      return {
+        ...prev,
+        term: [...(prev.term ?? []), value]
+      };
+    });
   };
 
-  try {
-    console.log('Submitting course data:', submitData);
-    courses.push(submitData); // push mapped object
-    alert('Course created successfully!');
-    handleReset(); // reset form
-  } catch (error) {
-    alert('Error creating course. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
+    const submitData = {
+      code: courseData.courseCode,
+      name: courseData.courseName,
+      description: courseData.description,
+      credits: courseData.credits,
+      instructor: courseData.instructor,
+      program: courseData.program,
+      enrolledStudents: 0,
+      maxStudents: courseData.maxStudents,
+      status: courseData.status,
+      startDate: courseData.startDate,
+      endDate: courseData.endDate,
+      schedule: '',
+      prerequisites: courseData.prerequisites || [],
+      domestic: courseData.domestic,
+      international: courseData.international,
+      term: courseData.term
+    };
+
+    try {
+      console.log('Submitting course data:', submitData);
+      await api.post('/courses/add', submitData);
+      OnCourseCreation();
+      handleReset();
+    } catch (error) {
+      console.error('Error creating course:', error);
+      alert('Error creating course. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleReset = () => {
     setCourseData({
@@ -81,98 +98,109 @@ const CreateCourse = () => {
       endDate: '',
       credits: 3,
       maxStudents: 30,
-      department: '',
-      level: 'Diploma',
+      department: 'Software Development',
+      program: '',
       status: 'active',
       prerequisites: [],
       learningObjectives: [''],
       syllabus: '',
-      fee: 0
+      domestic: 0,
+      international: 0,
+      term: []
     });
   };
 
   return (
-    <div className="create-course">
-      <div className="course-header">
-        <h1>Create New Course</h1>
-        <p>Fill in the course details to create a new course offering</p>
+    <div className="relative left-[5vw] w-[80%] max-w-none m-0">
+      <div className="mb-8 text-center">
+        <h1 className="text-gray-800 mb-2 text-2xl ml-[1vw]">Create New Course</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="course-form">
-        <div className="form-sections">
+      <form onSubmit={handleSubmit} className="bg-white rounded-xl p-8 shadow-lg w-full mx-auto">
+        <div className="flex flex-col gap-6">
           {/* Basic Information Section */}
-          <div className="form-section">
-            <h3>Basic Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="courseName">Course Name *</label>
+          <div className="p-6 border border-gray-200 rounded-lg bg-blue-50">
+            <h3 className="text-gray-800 mb-4 text-lg border-l-4 border-blue-500 pl-3 bg-purple-100 py-3 rounded-lg -mt-8 -mx-6 mb-6">
+              Basic Information
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Course Name *</label>
                 <input
                   type="text"
-                  id="courseName"
                   name="courseName"
                   value={courseData.courseName}
                   onChange={handleInputChange}
                   required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                   placeholder="e.g., Introduction to Computer Science"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="courseCode">Course Code *</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Course Code *</label>
                 <input
                   type="text"
-                  id="courseCode"
                   name="courseCode"
                   value={courseData.courseCode}
                   onChange={handleInputChange}
                   required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                   placeholder="e.g., CS101"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="instructor">Instructor *</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Instructor</label>
                 <input
                   type="text"
-                  id="instructor"
                   name="instructor"
                   value={courseData.instructor}
                   onChange={handleInputChange}
-                  required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                   placeholder="Instructor name"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="department">Department *</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Department *</label>
                 <select
-                  id="department"
                   name="department"
                   value={courseData.department}
                   onChange={handleInputChange}
                   required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 >
                   <option value="">Select Department</option>
-                  <option value="Software Development" >Software Development</option>
-                  <option value="mathematics">Mathematics</option>
-                  <option value="physics">Physics</option>
-                  <option value="business">Business</option>
-                  <option value="arts">Arts</option>
+                  <option value="Software Development">Software Development</option>
                 </select>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="credits">Credits</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Program *</label>
                 <select
-                  id="credits"
+                  name="program"
+                  value={courseData?.program}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
+                >
+                  <option value="">Select Program</option>
+                  {programs.map((program, index) => (
+                    <option key={index} value={program.name}>
+                      {program.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Credits</label>
+                <select
                   name="credits"
                   value={courseData.credits}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 >
                   <option value={1}>1 Credit</option>
                   <option value={2}>2 Credits</option>
@@ -180,112 +208,165 @@ const CreateCourse = () => {
                   <option value={4}>4 Credits</option>
                 </select>
               </div>
-
-              <div className="form-group">
-                <label htmlFor="level">Course Level</label>
-                <select
-                  id="level"
-                  name="level"
-                  value={courseData.level}
-                  onChange={handleInputChange}
-                  className="form-input"
-                >
-                  {programs.map((program, index) => (
-                      <option key={index} value={program.name}>
-                        {program.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
             </div>
           </div>
 
-          {/* Dates Section */}
-          <div className="form-section">
-            <h3>Course Schedule</h3>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="startDate">Start Date *</label>
+          {/* Course Schedule Section */}
+          <div className="p-6 border border-gray-200 rounded-lg bg-blue-50">
+            <h3 className="text-gray-800 mb-4 text-lg border-l-4 border-blue-500 pl-3 bg-purple-100 py-3 rounded-lg -mt-8 -mx-6 mb-6">
+              Course Schedule
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Start Date *</label>
                 <input
                   type="date"
-                  id="startDate"
                   name="startDate"
                   value={courseData.startDate}
                   onChange={handleInputChange}
                   required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="endDate">End Date *</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">End Date *</label>
                 <input
                   type="date"
-                  id="endDate"
                   name="endDate"
                   value={courseData.endDate}
                   onChange={handleInputChange}
                   required
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="maxStudents">Maximum Students</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Maximum Students</label>
                 <input
                   type="number"
-                  id="maxStudents"
                   name="maxStudents"
                   value={courseData.maxStudents}
                   onChange={handleInputChange}
                   min="1"
                   max="500"
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="fee">Course Fee ($)</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">Domestic Fee ($)</label>
                 <input
                   type="number"
-                  id="fee"
-                  name="fee"
-                  value={courseData.fee}
+                  name="domestic"
+                  value={courseData.domestic}
                   onChange={handleInputChange}
                   min="0"
                   step="0.01"
-                  className="form-input"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
                 />
               </div>
+
+              <div className="mb-4">
+                <label className="block mb-2 font-medium text-gray-800">International Fee ($)</label>
+                <input
+                  type="number"
+                  name="international"
+                  value={courseData.international}
+                  onChange={handleInputChange}
+                  min="0"
+                  step="0.01"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100"
+                />
+              </div>
+
+              <div className="mb-4">
+            <label className="block mb-2 font-medium text-gray-800 relative left-[6vw]">Course Terms</label>
+            <div className="flex gap-12 mt-2">
+              {/* First Column */}
+              <div className="flex flex-col gap-3">
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="term"
+                    value="Fall"
+                    checked={courseData.term?.includes("Fall")}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4"
+                  />
+                  Fall
+                </label>
+
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="term"
+                    value="Winter"
+                    checked={courseData.term?.includes("Winter")}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4"
+                  />
+                  Winter
+                </label>
+              </div>
+
+              {/* Second Column */}
+              <div className="flex flex-col gap-3">
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="term"
+                    value="Summer"
+                    checked={courseData.term?.includes("Summer")}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4"
+                  />
+                  Summer
+                </label>
+
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="term"
+                    value="Spring"
+                    checked={courseData.term?.includes("Spring")}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4"
+                  />
+                  Spring
+                </label>
+              </div>
+            </div>
+          </div>
             </div>
           </div>
 
           {/* Description Section */}
-          <div className="form-section">
-            <h3>Course Description</h3>
-            <div className="form-group">
-              <label htmlFor="description">Course Description *</label>
+          <div className="p-6 border border-gray-200 rounded-lg bg-blue-50">
+            <h3 className="text-gray-800 mb-4 text-lg border-l-4 border-blue-500 pl-3 bg-purple-100 py-3 rounded-lg -mt-8 -mx-6 mb-6">
+              Course Description
+            </h3>
+            <div className="mb-4">
+              <label className="block mb-2 font-medium text-gray-800">Course Description *</label>
               <textarea
-                id="description"
                 name="description"
                 value={courseData.description}
                 onChange={handleInputChange}
                 required
                 rows="4"
-                className="form-textarea"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-blue-100 resize-vertical"
                 placeholder="Provide a detailed description of the course..."
               />
             </div>
           </div>
 
-         <button className='btn-add' disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Add'}
-        </button>
-          
-         
+          <button 
+            className="bg-indigo-300 text-white py-2 px-6 rounded-full w-1/2 mx-auto hover:bg-green-600 disabled:bg-gray-400"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Add'}
+          </button>
         </div>
-
-        
       </form>
     </div>
   );

@@ -3,7 +3,6 @@ import {getAllCourses,addCourse,updateCourse,patchCourse,deleteCourse } from '..
 import {adminAuth,authenticateToken} from '../middleware/auth.js';
 const router=express.Router()
 
-/*router.get('/course/:given',adminAuth, getCourse);*/
 router.get('/all',getAllCourses);
 router.post('/add',adminAuth,addCourse);
 router.put('/:id',adminAuth,updateCourse);

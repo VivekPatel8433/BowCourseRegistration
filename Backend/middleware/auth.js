@@ -26,7 +26,7 @@ export const adminAuth = (req, res, next) => {
     req.user = user;
     // console.log("admin",{user})
     // Check role
-    if (user.userType !== "admin") {
+    if (user.role !== "admin") {
       return res.status(403).json({ error: "Admin access required" });
     }
 

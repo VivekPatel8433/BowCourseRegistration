@@ -237,6 +237,27 @@
 .form-input:valid:not(:focus):not(:placeholder-shown) {
   border-color: #27ae60;
 }
+.checkbox-group{
+   margin-top: 10px; /* spacing between each checkbox row */
+    display: flex;
+   align-items: center;
+   gap: 20px; /* space between checkbox and label text */
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between checkbox and label text */
+  margin-bottom: 6px; /* spacing between each checkbox row */
+  cursor: pointer; /* makes clicking easier */
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 
 /* Responsive Design for larger screens */
 @media (min-width: 1400px) {

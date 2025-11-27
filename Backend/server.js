@@ -22,7 +22,7 @@ app.use(
 );
 
 app.use(express.json());
-
+app.use(cookieParser());//parse cookies
 // Connect to MongoDB
 connectDB();
 

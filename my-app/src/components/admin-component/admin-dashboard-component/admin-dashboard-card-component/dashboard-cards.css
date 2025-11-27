@@ -1,7 +1,7 @@
 .dashboard-grid {
 position: relative;
 top: 10px;
-left: 22vw;
+left: 23.1vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;

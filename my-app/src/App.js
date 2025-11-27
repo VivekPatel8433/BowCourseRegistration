@@ -24,7 +24,7 @@ function App() {
     const [registeredUser, setRegisteredUser] = useState(null);
     const [message,setMessage]=useState(null)
   return (
-    <div className="app-background">
+    <div >{/*className="app-background" */}
       <Routes>
         {/* Home layout */}
         <Route element={<View />}>
@@ -50,7 +50,7 @@ function App() {
           <Route path="dashboard" element={<Navigate to="/admin" replace/>}/>
           <Route path="profile" element={<AdminProfile/>}/>
           <Route path="create-course" element={<CreateCourse/>}/>
-          <Route path="view-students" element={<StudentManagement/>}/>
+          <Route path="view-students" element={<Navigate to="/admin" replace/>}/>{/*<StudentManagement/> */}{/* view student disabled for now */}
           <Route path="messages" element={<MessageView viewMessage={message}/>}/>
         </Route>
       </Routes>

@@ -20,22 +20,28 @@ const SideNav = () => {
   ];
 
   return (
-    <aside className="app-background side-nav">
-      <ul>
-        {sideNav.map((item) => (
-          <li key={item.label}>
-            <NavLink
-              to={item.path}
-              className={({ isActive }) => (isActive ? "side-link active" : "side-link")}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </aside>
-  );
+     <aside className="bg-gradient-to-b from-blue-50 to-indigo-100 w-64 h-screen p-6 shadow-lg sticky top-0">
+        <ul className="space-y-3">
+          {sideNav.map((item) => (
+            <li key={item.label}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) => 
+                  `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
+                    isActive 
+                      ? "bg-blue-500 text-white shadow-md transform scale-105" 
+                      : "text-gray-700 hover:bg-white hover:shadow-md hover:text-blue-600"
+                  }`
+                }
+              >
+                {item.icon}
+                <span className="text-sm">{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    );
 };
 
 export default SideNav;

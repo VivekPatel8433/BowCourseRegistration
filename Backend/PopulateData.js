@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Program } from "./models/AdminData.js";
+import { Program } from "./models/AdminModel.js";
 // Array of programs to populate
 const programs = [
   {

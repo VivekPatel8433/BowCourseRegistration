@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './message-view.css';
-import {messages as messageInfo} from '../../../../data/messages'
-import {useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAdmin } from '../../../../context/AdminContext';
-const MessageView = ({viewMessage}) => {
-  const [messages, setMessages] = useState(messageInfo);
-  const [filteredMessages, setFilteredMessages] = useState(messages);
+import api from '../../../../services/api';
+
+const MessageView = () => {
+  const [filteredMessages, setFilteredMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -13,82 +12,91 @@ const MessageView = ({viewMessage}) => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [responseText, setResponseText] = useState('');
   const [isResponding, setIsResponding] = useState(false);
-  const {state} = useLocation();
-  const messageId =state?.messageId??null
-   // use custome hook
-   const {setReadId,setDeletedMessageId}=useAdmin();
- useEffect(() => {
-  if (!messageId) return;
+  
+  const { state } = useLocation();
+  const messageId = state?.messageId ?? null;
+  
+  const { markMessageAsRead, deleteMessage, messages, unreadMessages } = useAdmin();
 
-  const msgIndex = messages.findIndex(msg => msg.id === messageId);
+  console.log({messageId})
 
-  if (msgIndex !== -1) {
-    messages[msgIndex].status = 'read';
-     setReadId(messageId)
-    setMessages([...messages]);
-
-    handleSelectMessage(messages[msgIndex]);
-  }
-}, [messageId]);
-
- // Listen for new incoming message from parent
   useEffect(() => {
-    if (!viewMessage) return;
+    if (messages) {
+      let filtered = messages;
 
-    const newMessage = {
-      id: messages.length + 1,      // unique id as total length + 1
-      studentName: "Unkown Student",       
-      studentId: viewMessage.studentId || "N/A",
-      email: viewMessage.from || "",
-      program: viewMessage.program || "",
-      semester: viewMessage.semester || 1,
-      subject: viewMessage.subject || "No Subject",
-      message: viewMessage.message || viewMessage.text || "",
-      attachments: viewMessage.file ? [viewMessage.file.name] : [],
-      category: viewMessage.category || "other",
-      priority: viewMessage.priority || "normal",
-      status: 'unread',
-      submissionDate: new Date().toISOString(),
-      response: ''
+      if (searchTerm) {
+        filtered = filtered.filter(message =>
+          message.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          message.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          message.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          message.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      if (selectedCategory !== 'all') {
+        filtered = filtered.filter(message => message.category === selectedCategory);
+      }
+
+      if (selectedStatus !== 'all') {
+        filtered = filtered.filter(message => message.status === selectedStatus);
+      }
+
+      if (selectedPriority !== 'all') {
+        filtered = filtered.filter(message => message.priority === selectedPriority);
+      }
+
+      const sortedFiltered = sortMessages(filtered);
+      setFilteredMessages(sortedFiltered);
+    }
+  }, [unreadMessages, messages, searchTerm, selectedCategory, selectedStatus, selectedPriority]);
+
+  useEffect(() => {
+    const handleInitialMessage = async () => {
+      if (!messageId || !messages) return;
+
+      const message = messages.find(msg => msg.id === messageId);
+      if (message) {
+        if (message.status === 'unread') {
+          handleSelectMessage(message);
+        }
+      }
     };
 
-    setMessages(prev => [...prev, newMessage]);
-    setFilteredMessages(prev => [...prev, newMessage]);
-    
-  }, [viewMessage]);
-  // Categories for filtering
+    handleInitialMessage();
+  }, [messageId, messages, markMessageAsRead]);
+
   const categories = [
     'all', 'academic', 'registration', 'financial', 'technical', 'administrative', 'other'
   ];
 
-  // Sort messages: unread (longest to recent) then read (recent to longest)
   const sortMessages = (messagesArray) => {
-    const unreadMessages = messagesArray.filter(msg => msg.status === 'unread');
-    const readMessages = messagesArray.filter(msg => msg.status === 'read');
+    if (!messagesArray) return [];
     
-    // Sort unread: longest to recent (oldest first)
-    const sortedUnread = unreadMessages.sort((a, b) => 
+    const unreadMsgs = messagesArray.filter(msg => msg.status === 'unread');
+    const readMsgs = messagesArray.filter(msg => msg.status === 'read');
+    
+    const sortedUnread = unreadMsgs.sort((a, b) => 
       new Date(a.submissionDate) - new Date(b.submissionDate)
     );
     
-    // Sort read: recent to longest (newest first)
-    const sortedRead = readMessages.sort((a, b) => 
+    const sortedRead = readMsgs.sort((a, b) => 
       new Date(b.submissionDate) - new Date(a.submissionDate)
     );
     
     return [...sortedUnread, ...sortedRead];
   };
 
-  // Filter messages based on search and filters
   useEffect(() => {
+    if (!messages) return;
+    
     let filtered = messages;
 
     if (searchTerm) {
       filtered = filtered.filter(message =>
-        message.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        message.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        message.email.toLowerCase().includes(searchTerm.toLowerCase())
+        message.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        message.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        message.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        message.email?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -104,74 +112,63 @@ const MessageView = ({viewMessage}) => {
       filtered = filtered.filter(message => message.priority === selectedPriority);
     }
 
-    // Apply sorting
     const sortedFiltered = sortMessages(filtered);
     setFilteredMessages(sortedFiltered);
   }, [searchTerm, selectedCategory, selectedStatus, selectedPriority, messages]);
 
-  // Mark message as read
-  const markAsRead = (messageId) => {
-    setReadId(messageId)
-    setMessages(prev => prev.map(msg =>
-      msg.id === messageId ? { ...msg, status: 'read' } : msg
-    ));
-  };
-
-  // Select message to view
-  const handleSelectMessage = (message) => {
+  const handleSelectMessage = async (message) => {
     setSelectedMessage(message);
     setResponseText(message.response || '');
+
     if (message.status === 'unread') {
-      markAsRead(message.id);
-      
+      console.log({markedAsRead:message.id})
+      markMessageAsRead(message.id);
+      await api.patch(`/message/read/${message.id}`);
+      console.log({markedAsRead:message.id})
     }
   };
 
-  // Handle response submission
   const handleSubmitResponse = async () => {
     if (!selectedMessage || !responseText.trim()) return;
 
     setIsResponding(true);
     
     try {
-      setTimeout(() => {
-        setMessages(prev => prev.map(msg =>
-          msg.id === selectedMessage.id 
-            ? { 
-                ...msg, 
-                response: responseText.trim(),
-                status: 'read'
-              }
-            : msg
-        ));
-        setSelectedMessage(prev => ({ ...prev, response: responseText.trim() }));
-        setIsResponding(false);
-        alert('Response sent successfully!');
-      }, 1000);
+      setSelectedMessage(prev => ({ 
+        ...prev, 
+        response: responseText.trim()
+      }));
+      await api.post(`message/response/${selectedMessage.id}`, {
+        response: responseText.trim()
+      });
+      
+      alert('Response sent successfully!');
     } catch (error) {
+      console.error('Error sending response:', error);
       alert('Error sending response. Please try again.');
+    } finally {
       setIsResponding(false);
     }
   };
 
-  // Delete message
-  const handleDeleteMessage = (messageId) => {
+  const handleDeleteMessage = async (messageId) => {
     if (window.confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
-      setDeletedMessageId(messageId)
-      setMessages(prev => prev.filter(msg => msg.id !== messageId));
-      if (selectedMessage && selectedMessage.id === messageId) {
-        setSelectedMessage(null);
+      try {
+        deleteMessage(messageId);
+        await api.delete(`message/${messageId}`);
+        if (selectedMessage && selectedMessage.id === messageId) {
+          setSelectedMessage(null);
+          setResponseText('');
+        }
+        
+        alert('Message deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting message:', error);
+        alert('Error deleting message. Please try again.');
       }
-      
     }
   };
 
-  // Mark all as read
-  const markAllAsRead = () => {
-    setMessages(prev => prev.map(msg => ({ ...msg, status: 'read' })));
-  };
-
-  // Get priority icon and color
   const getPriorityInfo = (priority) => {
     switch (priority) {
       case 'high':
@@ -185,7 +182,6 @@ const MessageView = ({viewMessage}) => {
     }
   };
 
-  // Get category icon
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'academic':
@@ -203,77 +199,78 @@ const MessageView = ({viewMessage}) => {
     }
   };
 
-  // Calculate statistics
   const stats = {
-    total: messages.length,
-    unread: messages.filter(m => m.status === 'unread').length,
-    responded: messages.filter(m => m.response).length,
-    highPriority: messages.filter(m => m.priority === 'high').length
+    total: messages?.length || 0,
+    unread: unreadMessages?.length || 0,
+    responded: messages?.filter(m => m.response && m.status === "read").length || 0,
+    highPriority: messages?.filter(m => m.priority === 'high').length || 0
   };
 
   return (
-    <div className="message-view">
-      <div className="message-view-header">
-        <h1>Student Messages</h1>
-       
-      </div>
-
+    <div className="w-[60vw] relative top-0 left-[5vw]">
       {/* Statistics Cards */}
-      <div className="stats-cards">
-        <div className="stat-card">
-          <div className="stat-icon">📨</div>
-          <div className="stat-info">
-            <h3>{stats.total}</h3>
-            <p>Total Messages</p>
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">📨</div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{stats.total}</h3>
+              <p className="text-sm text-gray-600">Total Messages</p>
+            </div>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">🔔</div>
-          <div className="stat-info">
-            <h3>{stats.unread}</h3>
-            <p>Unread Messages</p>
+        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">🔔</div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{stats.unread}</h3>
+              <p className="text-sm text-gray-600">Unread Messages</p>
+            </div>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">✅</div>
-          <div className="stat-info">
-            <h3>{stats.responded}</h3>
-            <p>Responded</p>
+        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">✅</div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{stats.responded}</h3>
+              <p className="text-sm text-gray-600">Responded</p>
+            </div>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">🚨</div>
-          <div className="stat-info">
-            <h3>{stats.highPriority}</h3>
-            <p>High Priority</p>
+        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">🚨</div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{stats.highPriority}</h3>
+              <p className="text-sm text-gray-600">High Priority</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Controls Section */}
-      <div className="controls-section">
-        <div className="search-filters">
-          <div className="Search-box">
+      <div className="mb-6">
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
             <input
               type="text"
               placeholder="Search messages by student, subject, or content..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className="w-[26vw] h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             />
-           
           </div>
           
-          <div className="filter-group" style={{marginLeft:60}} >
+          <div className="flex gap-4 ml-16">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="filter-select"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             >
               <option value="all">All Categories</option>
-              {categories.filter(cat => cat !== 'all').map(category => (
+              {categories?.filter(cat => cat !== 'all').map(category => (
                 <option key={category} value={category}>
-                  {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}
+                  {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}
                 </option>
               ))}
             </select>
@@ -281,7 +278,7 @@ const MessageView = ({viewMessage}) => {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="filter-select"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             >
               <option value="all">All Status</option>
               <option value="unread">Unread</option>
@@ -291,7 +288,7 @@ const MessageView = ({viewMessage}) => {
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="filter-select"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             >
               <option value="all">All Priorities</option>
               <option value="high">High Priority</option>
@@ -300,21 +297,19 @@ const MessageView = ({viewMessage}) => {
             </select>
           </div>
         </div>
-        
-        
       </div>
 
-      <div className="messages-container">
+      <div className="grid grid-cols-[400px,1fr] gap-5 h-auto mt-5">
         {/* Messages List - Left Sidebar */}
-        <div className="messages-list">
-          <div className="messages-list-header">
-            <h3>Messages ({filteredMessages.length})</h3>
-            <div className="sort-info">
+        <div className="bg-gray-200 rounded-lg border border-gray-300 flex flex-col h-[30vw]">
+          <div className="p-5 border-b border-gray-300 bg-indigo-200">
+            <h3 className="m-0 mb-1 text-lg font-semibold">Messages ({filteredMessages.length})</h3>
+            <div className="text-sm text-gray-600">
               Sorted: Unread (oldest first) → Read (newest first)
             </div>
           </div>
           
-          <div className="messages-scroll">
+          <div className="flex-1 overflow-y-auto max-h-[calc(100vh-400px)]">
             {filteredMessages.length > 0 ? (
               filteredMessages.map(message => {
                 const priorityInfo = getPriorityInfo(message.priority);
@@ -323,80 +318,91 @@ const MessageView = ({viewMessage}) => {
                 return (
                   <div
                     key={message.id}
-                    className={`message-item ${message.status} ${selectedMessage?.id === message.id ? 'active' : ''}`}
+                    className={`p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-gray-50 ${
+                      message.status === 'unread' ? 'bg-yellow-50 font-medium' : ''
+                    } ${
+                      selectedMessage?.id === message.id ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                    }`}
                     onClick={() => handleSelectMessage(message)}
                   >
-                    <div className="message-header">
-                      <div className="student-info">
-                        <div className="student-name">
-                          {message.studentName}
-                          {message.status === 'unread' && <span className="unread-dot"></span>}
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <div className="font-semibold mb-1 flex items-center gap-2">
+                          {message.studentName || message.email}
+                          {message.status === 'unread' && (
+                            <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                          )}
                         </div>
-                        <div className="message-meta">
-                          <span className="priority" style={{ color: priorityInfo.color }}>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <span style={{ color: priorityInfo.color }}>
                             {priorityInfo.icon}
                           </span>
-                          <span className="date">
+                          <span>
                             {new Date(message.submissionDate).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="message-subject">
+                    <div className="font-medium mb-2 text-sm">
                       {getCategoryIcon(message.category)} {message.subject}
                     </div>
                     
-                    <div className="message-preview">
-                      {message.message.substring(0, 80)}...
+                    <div className="text-gray-600 text-sm mb-3 leading-relaxed">
+                      {message.message?.substring(0, 80)}...
                     </div>
                     
-                    <div className="message-footer">
-                      <div className="message-tags">
-                        <span className={`status-tag ${message.status}`}>
-                          {message.status}
+                    <div className="flex gap-1">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        message.status === 'unread' 
+                          ? 'bg-yellow-100 text-orange-800' 
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {message.status}
+                      </span>
+                      {message.attachments?.length > 0 && (
+                        <span className="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                          📎
                         </span>
-                        {message.attachments.length > 0 && (
-                          <span className="attachment-tag">
-                            📎
-                          </span>
-                        )}
-                        {hasResponse && (
-                          <span className="response-tag">
-                            ✅
-                          </span>
-                        )}
-                      </div>
+                      )}
+                      {hasResponse && (
+                        <span className="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                          ✅
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="no-messages">
+              <div className="p-4 text-center text-gray-500">
                 No messages found matching your criteria.
               </div>
             )}
           </div>
         </div>
 
-        {/* Message Detail View - Right Panel */}
-        <div className="message-detail">
+        {/* Message Detail - Right Panel */}
+        <div className="bg-gray-100 rounded-lg border border-gray-300 flex flex-col w-[40vw]">
           {selectedMessage ? (
-            <div className="message-detail-content">
-              <div className="detail-header">
-                <div className="detail-subject">
-                  <h2>{getCategoryIcon(selectedMessage.category)} {selectedMessage.subject}</h2>
-                  <div className="priority-badge" style={{ 
-                    backgroundColor: getPriorityInfo(selectedMessage.priority).color ,width:"30px"
-                  }}>
-                    {getPriorityInfo(selectedMessage.priority).icon} {/*{getPriorityInfo(selectedMessage.priority).label}*/}
+            <div className="flex-1 flex flex-col overflow-y-auto">
+              <div className="flex justify-between items-start p-5 border-b border-gray-300 bg-indigo-200">
+                <div className="flex-1">
+                  <h2 className="m-0 mb-2 text-xl font-semibold">
+                    {getCategoryIcon(selectedMessage.category)} {selectedMessage.subject}
+                  </h2>
+                  <div 
+                    className="inline-flex items-center justify-center px-2 py-1 rounded-full text-white text-sm font-medium"
+                    style={{ backgroundColor: getPriorityInfo(selectedMessage.priority).color, width: "30px" }}
+                  >
+                    {getPriorityInfo(selectedMessage.priority).icon}
                   </div>
                 </div>
                 
-                <div className="detail-actions">
+                <div className="flex gap-2">
                   <button
                     onClick={() => handleDeleteMessage(selectedMessage.id)}
-                    className="btn btn-delete"
+                    className="px-3 py-2 bg-red-500 text-white rounded border-none cursor-pointer text-sm"
                     title="Delete Message"
                   >
                     🗑️ Delete
@@ -404,39 +410,39 @@ const MessageView = ({viewMessage}) => {
                 </div>
               </div>
 
-              <div className="student-info-detail">
-                <div className="info-grid">
-                  <div className="info-item">
-                    <strong>Student:</strong> 
-                    <span>{selectedMessage.studentName} ({selectedMessage.studentId})</span>
+              <div className="p-5 border-b border-gray-300">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-600 text-sm">Student:</strong>
+                    <span>{selectedMessage.studentName || 'N/A'} ({selectedMessage.studentId || 'N/A'})</span>
                   </div>
-                  <div className="info-item">
-                    <strong>Email:</strong> 
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-600 text-sm">Email:</strong>
                     <span>{selectedMessage.email}</span>
                   </div>
-                  <div className="info-item">
-                    <strong>Program:</strong> 
-                    <span>{selectedMessage.program} • Semester {selectedMessage.semester}</span>
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-600 text-sm">Program:</strong>
+                    <span>{selectedMessage.program || 'N/A'} • Semester {selectedMessage.semester || 'N/A'}</span>
                   </div>
-                  <div className="info-item">
-                    <strong>Submitted:</strong> 
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-600 text-sm">Submitted:</strong>
                     <span>{new Date(selectedMessage.submissionDate).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="message-content">
-                <h4>Message:</h4>
-                <div className="message-text">
+              <div className="p-5 border-b border-gray-300 flex-1">
+                <h4 className="m-0 mb-4 text-gray-900 font-semibold">Message:</h4>
+                <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {selectedMessage.message}
                 </div>
                 
-                {selectedMessage.attachments.length > 0 && (
-                  <div className="attachments">
-                    <h5>Attachments:</h5>
-                    <div className="attachment-list">
+                {selectedMessage.attachments?.length > 0 && (
+                  <div className="mt-5">
+                    <h5 className="m-0 mb-2 text-gray-900 font-semibold">Attachments:</h5>
+                    <div className="flex flex-col gap-1">
                       {selectedMessage.attachments.map((attachment, index) => (
-                        <div key={index} className="attachment-item">
+                        <div key={index} className="px-3 py-2 bg-gray-50 rounded border border-gray-300">
                           📎 {attachment}
                         </div>
                       ))}
@@ -445,12 +451,14 @@ const MessageView = ({viewMessage}) => {
                 )}
               </div>
 
-              {/* Response Section with Reply Button */}
-              <div className="response-section">
-                <div className="response-header">
-                  <h4>Admin Response</h4>
+              {/* Response Section */}
+              <div className="p-5 bg-gray-50">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="m-0 text-gray-900 font-semibold">Admin Response</h4>
                   {selectedMessage.response && (
-                    <span className="replied-indicator">✅ Already Replied</span>
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                      ✅ Already Replied
+                    </span>
                   )}
                 </div>
                 
@@ -458,23 +466,23 @@ const MessageView = ({viewMessage}) => {
                   value={responseText}
                   onChange={(e) => setResponseText(e.target.value)}
                   placeholder="Type your response here..."
-                  className="response-textarea"
+                  className="w-full px-3 py-2 border border-gray-300 rounded resize-vertical font-sans text-sm mb-4"
                   rows="6"
                 />
                 
-                <div className="response-actions">
+                <div className="flex flex-col gap-4">
                   <button
                     onClick={handleSubmitResponse}
                     disabled={isResponding || !responseText.trim()}
-                    className="btn btn-primary reply-btn"
+                    className="self-start px-4 py-2 bg-blue-500 text-white rounded border-none cursor-pointer text-sm hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     {isResponding ? 'Sending...' : '📤 Send Response'}
                   </button>
                   
                   {selectedMessage.response && (
-                    <div className="existing-response">
-                      <h5>Previous Response:</h5>
-                      <div className="response-text">
+                    <div className="bg-white p-4 rounded border border-gray-300">
+                      <h5 className="m-0 mb-2 text-gray-900 font-semibold">Previous Response:</h5>
+                      <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                         {selectedMessage.response}
                       </div>
                     </div>
@@ -483,9 +491,9 @@ const MessageView = ({viewMessage}) => {
               </div>
             </div>
           ) : (
-            <div className="no-selection">
-              <div className="no-selection-icon">📨</div>
-              <h3>Select a message to view</h3>
+            <div className="flex flex-col justify-center items-center h-full text-center text-gray-600">
+              <div className="text-5xl mb-5">📨</div>
+              <h3 className="m-0 mb-2 text-gray-900 font-semibold">Select a message to view</h3>
               <p>Choose a message from the list to read its contents and respond to the student.</p>
             </div>
           )}
