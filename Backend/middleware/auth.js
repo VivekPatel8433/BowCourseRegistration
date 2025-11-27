@@ -9,13 +9,14 @@ export const authenticateToken = (req, res, next) => {
     if (err) return res.status(403).json({ error: "Invalid token" });
 
     req.user = user; // <-- Attach decoded token payload
-    console.log({user})
+    console.log({ user });
     next();
   });
 };
 
 export const adminAuth = (req, res, next) => {
-  const token = req.cookies.token;
+  const token =
+    req.cookies.token || req.header("Authorization")?.replace("Bearer ", "");
   if (!token) return res.status(403).json({ error: "Unauthorized" });
 
   jwt.verify(token, config.jwtSecret, (err, user) => {
@@ -23,7 +24,7 @@ export const adminAuth = (req, res, next) => {
 
     // Attach decoded token to request
     req.user = user;
-    console.log({user})
+    // console.log("admin",{user})
     // Check role
     if (user.role !== "admin") {
       return res.status(403).json({ error: "Admin access required" });
@@ -33,4 +34,3 @@ export const adminAuth = (req, res, next) => {
     next();
   });
 };
-
