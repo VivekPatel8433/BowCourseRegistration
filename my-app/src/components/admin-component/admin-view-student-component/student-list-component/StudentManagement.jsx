@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './student-management.css';
-import { students as studentInfo } from '../../../../data/students';
-import { programs as programInfo } from '../../../../data/Admin-mock-data';
 
+// this component is abandoned for now
 const StudentManagement = () => {
-  const [students, setStudents] = useState(studentInfo);
+  const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProgram, setSelectedProgram] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -12,8 +11,8 @@ const StudentManagement = () => {
   const [filteredStudents, setFilteredStudents] = useState(students);
 
   // Get programs for filter and display
-  const programs = ['all', ...programInfo];
-
+  const programs = ['all', ...[]];
+  const programInfo=[]
   // Enhanced student data with program names
   const studentsWithProgramNames = students.map(student => {
     const program = programInfo.find(p => p.id === student.programId);

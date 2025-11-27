@@ -1,13 +1,9 @@
 import { Program, Course, } from'../models/AdminModel.js';
-import populateCourses from "../populateCourse.js"
 // ---------------------------------------------------
 // GET ALL PROGRAMS
 // ---------------------------------------------------
 export async function getAllPrograms(req,res) {
   try {
-    // console.log("seeding a programs");
-    // await seedPrograms();
-
     const programs = await Program.aggregate([
       {
         $match: { department: "Software Development" }
@@ -53,7 +49,7 @@ export async function getAllPrograms(req,res) {
 export async function getAllCourses(req,res) {
   try {
     console.log("Seeding all courses");
-   // await populateCourses(); // to populate for first time
+
     const courses = await Course.aggregate([
       {
         $lookup: {

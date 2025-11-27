@@ -1,7 +1,6 @@
 import { Enrollment, Course, Program } from "../models/AdminModel.js";
 import StudentMessage from "../models/StudentMessage.js";
 import mongoose from "mongoose";
-import {seedStudentMessages} from "../populateMessage.js"
 export const getMyEnrollments = async (req, res) => {
   try {
     const studentId = req.user.id;
@@ -84,8 +83,6 @@ export const addStudentMessage = async (req, res) => {
 
 export const getStudentMessages = async (req, res) => {
   try {
-    // await seedStudentMessages(); // populate messages for test
-
     const messages = await StudentMessage.find().sort({ createdAt: -1 }); // descending order
    // console.log({ messages });
     res.status(200).json(messages);

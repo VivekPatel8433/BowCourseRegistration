@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { students } from "../../../data/students";
+
 
 const StudentProfile = () => {
-  const [profile, setProfile] = useState(students);
+  const [profile, setProfile] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profile.photo);
   const [saveClicked, setSaveClicked] = useState(false);
-
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleChange = (e) => {
