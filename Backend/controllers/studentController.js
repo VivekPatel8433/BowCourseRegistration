@@ -1,14 +1,31 @@
 import { Enrollment, Course, Program } from "../models/AdminModel.js";
 import StudentMessage from "../models/StudentMessage.js";
 import mongoose from "mongoose";
+
+// Fetch all courses for student dashboard
+export const getAllCourses = async (req, res) => {
+  try {
+    const courses = await Course.find().populate("programId");
+
+    res.status(200).json({
+      success: true,
+      courses,
+    });
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const getMyEnrollments = async (req, res) => {
   try {
     const studentId = req.user.id;
-     console.log("fetching enrolment courses",studentId)
+    console.log("fetching enrolment courses", studentId);
+
     const enrollments = await Enrollment.find({ studentId })
       .populate("courseId")
       .populate("programId");
-     //console.log({enrollments})
+
     res.status(200).json(enrollments);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
@@ -19,7 +36,8 @@ export const enrollCourse = async (req, res) => {
   try {
     const studentId = req.user.id;
     const courseId = req.params.id;
-    console.log({courseId})
+    console.log({ courseId });
+
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ message: "Course not found" });
 
@@ -41,7 +59,8 @@ export const dropCourse = async (req, res) => {
   try {
     const studentId = req.user.id;
     const courseId = req.params.id;
-   console.log({studentId,courseId})
+    console.log({ studentId, courseId });
+
     await Enrollment.findOneAndDelete({ studentId, courseId });
 
     res.status(200).json({ message: "Course dropped" });
@@ -50,25 +69,22 @@ export const dropCourse = async (req, res) => {
   }
 };
 
-
 export const addStudentMessage = async (req, res) => {
   try {
-    // Only extract the fields you want from request body
     const { subject, message, attachments } = req.body;
-     const studentId=req.user.id;
-     console.log("student id from cooki",studentId)
-    // Create new StudentMessage with only required/default fields
+    const studentId = req.user.id;
+    console.log("student id from cooki", studentId);
+
     const newMessage = new StudentMessage({
       studentId,
       subject,
       message,
       attachments: attachments || [],
-      status: "unread",             
-      submissionDate: new Date(),  
-      responses: [],               
+      status: "unread",
+      submissionDate: new Date(),
+      responses: [],
     });
 
-    // Save to DB
     await newMessage.save();
 
     res.status(201).json({
@@ -83,8 +99,7 @@ export const addStudentMessage = async (req, res) => {
 
 export const getStudentMessages = async (req, res) => {
   try {
-    const messages = await StudentMessage.find().sort({ createdAt: -1 }); // descending order
-   // console.log({ messages });
+    const messages = await StudentMessage.find().sort({ createdAt: -1 });
     res.status(200).json(messages);
   } catch (error) {
     console.error(error);
@@ -96,7 +111,6 @@ export const deleteMessage = async (req, res) => {
   try {
     const msgId = req.params.id;
 
-    // Delete message by ID
     const result = await StudentMessage.deleteOne({ _id: msgId });
 
     if (result.deletedCount === 0) {
@@ -110,19 +124,15 @@ export const deleteMessage = async (req, res) => {
   }
 };
 
-
-
 export const responseMessage = async (req, res) => {
   try {
     const msgId = req.params.id;
-    const { response } = req.body || {}; // <-- default to empty object
-    const adminId = req.user.id; // admin id from auth middleware
+    const { response } = req.body || {};
+    const adminId = req.user.id;
 
-    // Build update object dynamically
     const update = { $set: { status: "read" } };
 
     if (response) {
-      // Wrap string into object matching the responseSchema
       update.$push = {
         responses: {
           adminId: new mongoose.Types.ObjectId(adminId),

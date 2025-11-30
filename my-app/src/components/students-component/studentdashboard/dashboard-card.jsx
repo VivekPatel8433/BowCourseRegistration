@@ -1,7 +1,14 @@
-import React,{useEffect} from "react";
-import { FaIdBadge, FaGraduationCap, FaBuilding, FaCalendarAlt } from "react-icons/fa";
-import api from '../../../services/api'
+import React, { useEffect } from "react";
+import {
+  FaIdBadge,
+  FaGraduationCap,
+  FaBuilding,
+  FaCalendarAlt,
+} from "react-icons/fa";
+import api from "../../../services/api";
 import { useStudent } from "../../../context/StudentContext";
+
+// Base card definition
 const cards = [
   {
     title: "Student ID",
@@ -10,7 +17,7 @@ const cards = [
     status: "Active",
     statusColor: "#D1FAE5",
     statusTextColor: "#065F46",
-    class: "blue"
+    class: "blue",
   },
   {
     title: "Program",
@@ -18,7 +25,7 @@ const cards = [
     subtitle: "Diploma (2 years)",
     icon: <FaGraduationCap />,
     status: null,
-    class: "green"
+    class: "green",
   },
   {
     title: "Department",
@@ -26,7 +33,7 @@ const cards = [
     subtitle: "SD Department",
     icon: <FaBuilding />,
     status: null,
-    class: "purple"
+    class: "purple",
   },
   {
     title: "Current Term",
@@ -34,140 +41,136 @@ const cards = [
     subtitle: "Jan - Mar",
     icon: <FaCalendarAlt />,
     status: null,
-    class: "orange"
-  }
+    class: "orange",
+  },
 ];
 
+// Icon and background colors
 const iconColors = {
-  blue: "rgb(39, 101, 235)",
-  green: "#16a34a",
-  gray: "rgb(147, 51, 234)",
-  red: "rgb(234, 88, 12)",
-  purple: "#7c3aed",
-  orange: "#f97316"
+  blue: "text-blue-600",
+  green: "text-green-600",
+  gray: "text-gray-700",
+  red: "text-red-600",
+  purple: "text-purple-600",
+  orange: "text-orange-600",
 };
 
 const backgroundColors = {
   blue: "bg-blue-100",
-  green: "bg-green-100", 
+  green: "bg-green-100",
   gray: "bg-gray-200",
   red: "bg-red-100",
   purple: "bg-purple-100",
-  orange: "bg-orange-100"
+  orange: "bg-orange-100",
 };
 
-function Card({ children }) {
-  return (
-    <div className="flex-1 min-w-[10vw] bg-blue-50 bg-opacity-85 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 hover:-translate-y-1.5 cursor-pointer border border-gray-300 border-opacity-10">
-      {children}
-    </div>
-  );
-}
-
-function CardContent({ children }) {
-  return <div className="p-6 flex flex-col items-start">{children}</div>;
-}
-// Get current date
+// Determine current term dynamically
 const now = new Date();
-const month = now.getMonth() + 1; // JS months: 0-11
+const month = now.getMonth() + 1;
 const year = now.getFullYear();
 let term = "";
 let termSubtitle = "";
-// Determine term
+
 if (month >= 9 && month <= 12) {
   term = "Fall";
-  termSubtitle = "Sep-Dec";
-} else if (month >= 1 && month <= 6) {
+  termSubtitle = "Sep - Dec";
+} else if (month >= 1 && month <= 4) {
   term = "Winter";
-  termSubtitle = "Jan-Jun";
-} else if (month >= 6 && month <= 9) {
-  term = "Summer";
-  termSubtitle = "Jun-Sep";
+  termSubtitle = "Jan - Apr";
+} else if (month >= 5 && month <= 8) {
+  term = "Spring / Summer";
+  termSubtitle = "May - Aug";
 }
-const DashboardCards = () => {
-   const {studentInfo,setStudentInfo}= useStudent();// student custom hook
 
-   useEffect(() => {
-  const fetchStudentData = async () => {
-    try {
-      const res = await api.get("/auth/user/loggedIn");
-      console.log(res)
-      setStudentInfo(res.data.user);
-     
-      // Update cards dynamically
-      cards[1].value = res?.data?.deptName || cards[1].value;
-      cards[1].subtitle = `${res?.data?.programName} (${parseInt(res?.data?.duration)})`;
-      cards[2].value = res?.data?.deptName || cards[2].value;
+export default function DashboardCards() {
+  const { studentInfo, setStudentInfo } = useStudent();
 
-      // Current Term card
-      cards[3].value = `${term} ${year}`;
-      cards[3].subtitle = termSubtitle;
-      console.log({ updatedCards: cards });
-    } catch (error) {
-      console.error("Error fetching student data:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      try {
+        const res = await api.get("/auth/user/loggedIn");
 
-  fetchStudentData();
-}, []);
+        setStudentInfo(res.data.user);
+
+        // Update cards dynamically
+        cards[1].value = res?.data?.programName || cards[1].value;
+        cards[1].subtitle = `${res?.data?.programName} (${parseInt(
+          res?.data?.duration
+        )})`;
+
+        cards[2].value = res?.data?.deptName || cards[2].value;
+
+        cards[3].value = `${term} ${year}`;
+        cards[3].subtitle = termSubtitle;
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+      }
+    };
+
+    fetchStudentData();
+  }, []);
 
   return (
-    <div className="flex flex-col gap-5 mt-5 relative left-[5vw] w-[50vw]">
-      {/* Header */}
-      <div className="header">
-        <h1 className="m-0 text-3xl text-gray-900">Student Dashboard</h1>
-        <p className="text-base text-gray-500 mt-1 mb-0">
-        {/*   Welcome back, Sarah! Here's your academic overview.*/}
+    <div className="w-full">
+      {/* HEADER */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Student Dashboard</h1>
+        <p className="text-gray-500 text-sm">
+          {/* Optional welcome message */}
         </p>
       </div>
 
-      {/* Cards Grid */}
-      <div className="flex flex-wrap justify-center gap-6 mt-12 w-[70vw]">
+      {/* CARDS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {cards.map((card, index) => (
-          <Card key={index}>
-            <CardContent>
-              {/* Icon Row */}
-              <div className={`flex items-center justify-center w-12 h-12 rounded-full ${backgroundColors[card.class]}`}>
-                <div style={{ color: iconColors[card.class] }} className="text-xl">
-                  {card.icon}
-                </div>
+          <div
+            key={index}
+            className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 hover:shadow-md transition cursor-pointer"
+          >
+            {/* ICON */}
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center ${backgroundColors[card.class]}`}
+            >
+              <div className={`text-xl ${iconColors[card.class]}`}>
+                {card.icon}
               </div>
+            </div>
 
-              {/* Card Header */}
-              <div className="flex items-center justify-between w-full mt-2.5">
-                <h4 className="m-0 text-base font-semibold text-gray-900">{card.title}</h4>
-                {card.status && (
-                  <span
-                    className="text-xs font-medium px-2 py-0.5 rounded-full"
-                    style={{
-                      backgroundColor: card.statusColor,
-                      color: card.statusTextColor
-                    }}
-                  >
-                    {card.status}
-                  </span>
-                )}
-              </div>
+            {/* TITLE + STATUS */}
+            <div className="flex items-center justify-between mt-4">
+              <h3 className="text-base font-semibold text-gray-900">
+                {card.title}
+              </h3>
 
-              {/* Card Value */}
-              <p className={`mt-2 font-bold ${
-                index === 0 ? 'text-xl text-blue-600' : 'text-gray-900'
-              }`}>
-                {card.value}
-              </p>
-              
-              {/* Subtitle */}
-              {card.subtitle && (
-                <p className="mt-0.5 text-sm text-gray-500 mb-0">
-                  {card.subtitle}
-                </p>
+              {card.status && (
+                <span
+                  className="text-xs font-medium px-2 py-0.5 rounded-full"
+                  style={{
+                    backgroundColor: card.statusColor,
+                    color: card.statusTextColor,
+                  }}
+                >
+                  {card.status}
+                </span>
               )}
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* VALUE */}
+            <p
+              className={`mt-2 font-bold ${
+                index === 0 ? "text-xl text-blue-600" : "text-gray-900"
+              }`}
+            >
+              {card.value}
+            </p>
+
+            {/* SUBTITLE */}
+            {card.subtitle && (
+              <p className="text-sm text-gray-500 mt-1">{card.subtitle}</p>
+            )}
+          </div>
         ))}
       </div>
     </div>
   );
-};
-
-export default DashboardCards;
+}

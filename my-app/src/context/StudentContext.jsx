@@ -1,63 +1,88 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 import api from "../services/api";
+import { getPrograms } from "../services/studentApi";
 
 const StudentContext = createContext();
 
 export const StudentProvider = ({ children }) => {
-  const [selectedTerm, setSelectedTerm] = useState(""); 
+  const [selectedTerm, setSelectedTerm] = useState("");
   const [studentInfo, setStudentInfo] = useState(null);
-  const [courses, setCourses] = useState(null);
-  const [enrolledCourses, setEnrolledCourses] = useState(null);
 
-  // Fetch courses on mount
-  useEffect(() => {
-    (async () => {
-      await fetchCourses();
-      await fetchEnrolledCourses();
-    })();
-  }, []);
+  const [programs, setPrograms] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
-  // Fetch all courses
-  const fetchCourses = async () => {
+  // ---------------------------------------------------------
+  // REUSABLE FUNCTION — Load current enrollments
+  // ---------------------------------------------------------
+  const loadEnrollments = async () => {
     try {
-      const res = await api.get("/courses/all");
-      setCourses(res.data.courses);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
+      const res = await axios.get(
+        "http://localhost:3001/api/student/enrollments",
+        { withCredentials: true }
+      );
+      setEnrolledCourses(res.data || []);
+    } catch (err) {
+      console.error("Failed to load enrollments:", err);
     }
   };
 
- const fetchEnrolledCourses = async () => {
-  try {
-    const res = await api.get("/students/courses");
+  // ---------------------------------------------------------
+  // Initial Data Fetch: programs, courses, enrollments
+  // ---------------------------------------------------------
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/api/courses");
+        setCourses(res.data || []);
+      } catch (err) {
+        console.error("Error loading courses:", err);
+      }
+    };
 
-    // res.data is an array of enrollments
-    const coursesOnly = res.data.map(e => e.courseId);
+    const loadProgramsData = async () => {
+      try {
+        const programRes = await getPrograms();
+        setPrograms(programRes.data || []);
+      } catch (err) {
+        console.error("Error loading programs:", err);
+      }
+    };
 
-    setEnrolledCourses(coursesOnly);
-    console.log("Enrolled courses:", coursesOnly);
-  } catch (error) {
-    console.error("Error fetching enrolled courses:", error);
-  }
-};
+    fetchCourses();
+    loadProgramsData();
+    loadEnrollments();
+  }, []);
 
-
+  // ---------------------------------------------------------
   // Enroll in a course
-  const enroll = async (id) => {
+  // ---------------------------------------------------------
+  const enroll = async (courseId) => {
     try {
-      await api.post(`/students/enroll/${id}`);
-      await fetchEnrolledCourses(); // refresh list
+      await axios.post(
+        `http://localhost:3001/api/student/enroll/${courseId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      await loadEnrollments(); // Auto-refresh
     } catch (error) {
       console.error("Error enrolling:", error);
     }
   };
 
+  // ---------------------------------------------------------
   // Unenroll from a course
-  const unenroll = async (id) => {
+  // ---------------------------------------------------------
+  const unenroll = async (courseId) => {
     try {
-      console.log("dropping",id)
-      await api.delete(`students/drop/${id}`);
-      await fetchEnrolledCourses(); // refresh list
+      await axios.delete(
+        `http://localhost:3001/api/student/enroll/${courseId}`,
+        { withCredentials: true }
+      );
+
+      await loadEnrollments(); // Auto-refresh
     } catch (error) {
       console.error("Error unenrolling:", error);
     }
@@ -68,13 +93,17 @@ export const StudentProvider = ({ children }) => {
       value={{
         selectedTerm,
         setSelectedTerm,
+
         studentInfo,
         setStudentInfo,
+
+        programs,
         courses,
         enrolledCourses,
+
         enroll,
         unenroll,
-       
+        loadEnrollments,
       }}
     >
       {children}

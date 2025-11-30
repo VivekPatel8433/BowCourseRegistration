@@ -1,12 +1,9 @@
-import express from 'express'
-import {getAllCourses,addCourse,updateCourse,patchCourse,deleteCourse } from '../controllers/AdminController.js';
-import {adminAuth,authenticateToken} from '../middleware/auth.js';
-const router=express.Router()
+import express from "express";
+import { getAllCourses } from "../controllers/studentController.js";
 
-router.get('/all',getAllCourses);
-router.post('/add',adminAuth,addCourse);
-router.put('/:id',adminAuth,updateCourse);
-router.patch('/:id',adminAuth,patchCourse);
-router.delete('/:id',adminAuth,deleteCourse);
+const router = express.Router();
+
+// PUBLIC — fetch all courses (used by Student Dashboard)
+router.get("/", getAllCourses);
 
 export default router;

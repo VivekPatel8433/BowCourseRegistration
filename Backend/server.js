@@ -1,18 +1,24 @@
-import express from "express"; // Type: Module in Package.json makes us to use ES modules-import..
+import express from "express"; 
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import router from "./routes/authRoutes.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
+import connectDB from "./config/db.js";
+
+// Routes
+import authRoutes from "./routes/authRoutes.js";
 import courseRouter from "./routes/courseRoutes.js";
 import programRouter from "./routes/programRoutes.js";
 import studentRouter from "./routes/studentRoutes.js";
-import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// ------------------------
+// Middleware
+// ------------------------
 app.use(
   cors({
     origin: ["http://localhost:3001", "http://localhost:3000"],
@@ -21,21 +27,30 @@ app.use(
   })
 );
 
-
 app.use(express.json());
-app.use(cookieParser());//parse cookies
-// Connect to MongoDB
+app.use(cookieParser());
+
+// Connect to DB
 connectDB();
 
-app.use(cookieParser());
-app.use("/api/auth", router);
+// ------------------------
+// API Routes
+// ------------------------
+app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRouter);
-app.use("/api/programs", programRouter);
+app.use("/api/programs", programRouter);   
 app.use("/api/students", studentRouter);
 
-// Example route
+// ------------------------
+// Root Test Route
+// ------------------------
 app.get("/", (req, res) => {
   res.send("API running...");
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ------------------------
+// Start Server
+// ------------------------
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
