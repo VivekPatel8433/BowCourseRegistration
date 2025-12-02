@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
 import api from "../../services/api"
-
+import { sanitizeInputs } from "../../services/sanitizeInput";
 function strengthLabel(score) {
   if (score >= 4) return "Strong";
   if (score === 3) return "Good";
@@ -133,15 +133,11 @@ export default function Signup({ onSignup }) {
   };
 
   try {
-    const res = await api.post( "/auth/register",payload );
+    const res = await api.post( "/auth/register",  sanitizeInputs(payload) ); // sanitize inputs
 
     console.log("Registration success:", res.data);
 
-    // Store JWT token if backend returns it
-   /* if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-    }*/
-
+  
     // Redirect to login
     navigate("/Home/login", { replace: true });
 

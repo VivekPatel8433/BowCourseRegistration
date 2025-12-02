@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-
-
+import api from "../../../services/api"
+import {sanitizeInputs} from "../../../services/sanitizeInput"
+import {useStudent} from "../../../context/StudentContext"
 const StudentProfile = () => {
   const [profile, setProfile] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profile.photo);
   const [saveClicked, setSaveClicked] = useState(false);
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+ const { studentInfo: currentUser ,setStudentInfo,} = useStudent();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,14 +25,21 @@ const StudentProfile = () => {
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
-  const handleSave = (e) => {
+  const handleSave = async(e) => {
     e.preventDefault();
     setSaveClicked(true);
+    try {
+      await api.put(`/auth/user/profile`,sanitizeInputs(profile));
+      setStudentInfo(profile)
+      console.log({profile})
+    } catch (error) {
+      
+    }
+    
   };
 
   useEffect(() => {
     if (saveClicked) {
-      localStorage.setItem("currentUser", JSON.stringify(profile));
       setIsEditing(false);
       setSaveClicked(false);
     }

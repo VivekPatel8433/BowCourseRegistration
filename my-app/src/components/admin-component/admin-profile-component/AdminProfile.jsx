@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAdmin } from "../../../context/AdminContext";
 import api from "../../../services/api";
-
+import {sanitizeInputs} from "../../../services/sanitizeInput"
 const AdminProfile = () => {
   const { admin, login, updateAdmin } = useAdmin();
 
@@ -34,14 +34,14 @@ const AdminProfile = () => {
 
   const handleSave = async () => {
     try {
-      const res = await api.patch(`/users/${login.id}`, { user: formData });
-      console.log(res)
+      await api.put(`/auth/user/profile`,sanitizeInputs(formData));
+      console.log({formData})
       updateAdmin({
         ...admin,
-        firstName: res.data.data.fName,
-        lastName: res.data.data.lName,
-        email: res.data.data.email,
-        phone: res.data.data.phone,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email:formData.email,
+        phone: formData.phone,
       });
 
       setIsEditing(false);

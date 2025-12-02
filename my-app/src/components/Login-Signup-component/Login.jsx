@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
+import { sanitizeInput } from "../../services/sanitizeInput";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function Login() {
       const res = await axios.post(
         "http://localhost:3001/api/auth/login",
         {
-          email: form.email,
+          email: sanitizeInput(form.email),
           password: form.password
         },
         { withCredentials: true } // optional, depending on JWT storage

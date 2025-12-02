@@ -147,7 +147,7 @@ export async function addCourse(req,res) {
 
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({ error: err.message});
   }
 }
 
@@ -158,6 +158,7 @@ export async function updateCourse(req,res) {
   try {
     const id= req.params.id;
       const courseData= req.body;
+      console.log({courseData})
     const updatedCourse = await Course.findByIdAndUpdate(
       id,
       {
@@ -174,8 +175,8 @@ export async function updateCourse(req,res) {
       endDate: courseData.endDate,
       schedule: courseData.schedule || "",
       fees: {
-        domestic: courseData.domestic,
-        international: courseData.international
+        domestic: courseData.fees.domestic,
+        international: courseData.fees.international
       },
       prerequisites: courseData.prerequisites || []
       },
@@ -183,7 +184,7 @@ export async function updateCourse(req,res) {
     );
 
     if (!updatedCourse) {
-      throw new Error('Course not found');
+      return res.status(404).json({ error:"Course no found"});
     }
     return res.status(200).json({
      success: true,
@@ -221,12 +222,12 @@ export async function patchCourse(req,res) {
     );
 
     if (!updatedCourse) {
-      throw new Error('Course not found');
+      return res.status(404).json({ error:"Course no found"});
     }
     return res.status(200).json({updatedCourse})
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({ error: err});
   }
 }
 
@@ -239,7 +240,7 @@ export async function deleteCourse(req,res) {
     const result = await Course.findByIdAndDelete(id);
     
     if (!result) {
-      throw new Error('Course not found');
+        return res.status(404).json({ error:"Course no found"});
     }
    return res.status(200).json({deleted:result})
  
