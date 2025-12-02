@@ -10,19 +10,27 @@ export default function CourseManager() {
   const [editingCourse, setEditingCourse] = useState(null);
   const [courseToDelete, setCourseToDelete] = useState(null);
 
-  const { programs, courses, deleteCourse, updateCourse } = useAdmin();
+  const { programs, courses, updateCourse } = useAdmin();
   
   useEffect(() => {
     setCourseList(courses);
   }, [courses]);
 
-  const filteredCourses = courseList?.filter(
-    (course) =>
-      course.name?.toLowerCase().includes(search.toLowerCase()) ||
-      course.code?.toLowerCase().includes(search.toLowerCase()) ||
-      course.term?.toLowerCase().includes(search.toLocaleLowerCase()) ||
-      Number(course.credit)?.includes(Number(search)())
-  );
+  const filteredCourses = courseList?.filter((course) => {
+  const searchLower = search.toLowerCase();
+
+  // Check name, code, term
+  const matchesText =
+    course.name?.toLowerCase().includes(searchLower) ||
+    course.code?.toLowerCase().includes(searchLower) ||
+    course.term?.toLowerCase().includes(searchLower);
+
+  // Check numeric credit
+  const matchesCredit = !isNaN(Number(search)) && Number(course.credit) === Number(search);
+
+  return matchesText || matchesCredit;
+});
+
 
   // Edit
   const handleEdit = (course) => {
@@ -33,15 +41,8 @@ export default function CourseManager() {
     if (!editingCourse) return;
 
     try {
-      const res = await api.patch(`/courses/${editingCourse.id}`, editingCourse);
-      console.log({ dta: res.data });
-      
-      const updated = courseList.map((course) =>
-        course.id === editingCourse.id ? res.data : course
-      );
-
-      setCourseList(updated);
-      updateCourse(editingCourse);
+      await api.patch(`/courses/${editingCourse._id}`, editingCourse);
+      updateCourse();
       setEditingCourse(null);
     } catch (err) {
       console.error("Failed to update course", err);
@@ -66,10 +67,8 @@ export default function CourseManager() {
 
   const confirmDelete = async () => {
     try {
-      await api.delete(`/courses/${courseToDelete.id}`);
-      const updatedCourses = courseList.filter((course) => course.id !== courseToDelete.id);
-      setCourseList(updatedCourses);
-      deleteCourse(courseToDelete.id);
+      await api.delete(`/courses/${courseToDelete._id}`);
+      updateCourse();
       setEditingCourse(null);
       setShowDeleteModal(false);
       setCourseToDelete(null);
@@ -114,7 +113,7 @@ export default function CourseManager() {
               </strong>
               <p className="text-sm text-gray-600 mb-2">{course.description}</p>
               <div className="text-sm text-gray-500 flex gap-4">
-                <span>📅 {course.term}</span>
+                <span>📅 {course.terms.join(',')}</span>
                 <span>👥 {course.totalEnrollment} enrolled</span>
                 <span>Credit {course.credit}</span>
                 <span>Start {new Date(course?.startDate).toLocaleDateString()}</span>
@@ -225,8 +224,8 @@ export default function CourseManager() {
                     Credits
                   </label>
                   <select
-                    name="credits"
-                    value={editingCourse.credits}
+                    name="credit"
+                    value={editingCourse.credit}
                     onChange={handleEditChange}
                     className="w-full px-3 py-3 border border-gray-300 rounded text-base transition-all focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-200 box-border"
                   >

@@ -23,6 +23,12 @@ export const enrollCourse = async (req, res) => {
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ message: "Course not found" });
 
+      // Check if course is full
+    const totalEnrollments = await Enrollment.countDocuments({ courseId });
+    if (totalEnrollments >= 5) {
+      return res.status(400).json({ message: "Course is full (max 5 students)" });
+    }
+
     const newEnrollment = new Enrollment({
       studentId,
       courseId,
@@ -33,7 +39,7 @@ export const enrollCourse = async (req, res) => {
 
     res.status(201).json({ message: "Enrolled successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -83,8 +89,13 @@ export const addStudentMessage = async (req, res) => {
 
 export const getStudentMessages = async (req, res) => {
   try {
-    const messages = await StudentMessage.find().sort({ createdAt: -1 }); // descending order
-   // console.log({ messages });
+    const messages = await StudentMessage.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "studentId",
+        select: "firstName lastName email username studentData"
+      });
+
     res.status(200).json(messages);
   } catch (error) {
     console.error(error);
@@ -92,10 +103,11 @@ export const getStudentMessages = async (req, res) => {
   }
 };
 
+
 export const deleteMessage = async (req, res) => {
   try {
     const msgId = req.params.id;
-
+  console.log({msgId})
     // Delete message by ID
     const result = await StudentMessage.deleteOne({ _id: msgId });
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../../../services/api";
 
 const ContactAdmin = ({ sendMessage }) => {
   const [email, setEmail] = useState("");
@@ -6,7 +7,7 @@ const ContactAdmin = ({ sendMessage }) => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleSend = (e) => {
+  const handleSend = async(e) => {
     e.preventDefault();
 
     if (!email.trim() || !subject.trim() || !message.trim()) {
@@ -22,7 +23,11 @@ const ContactAdmin = ({ sendMessage }) => {
       file,
     });
 
-    alert("Message sent successfully!");
+   try {
+    await api.post('/students/message',{subject,message,file})
+   } catch (error) {
+    
+   }
 
     // Clear form
     setEmail("");

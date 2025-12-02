@@ -50,7 +50,7 @@ const enrollmentSchema = new mongoose.Schema({
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
   programId: { type: mongoose.Schema.Types.ObjectId, ref: 'Program', required: true },
   enrolledAt: { type: Date, default: Date.now }
-}, { timestamps: true });
+}, { timestamps: true ,autoIndex:true});
 // Compound index to make (studentId + courseId) unique
 enrollmentSchema.index({ studentId: 1, courseId: 1 }, { unique: true });
 // Models (SAFE VERSIONS)

@@ -7,7 +7,7 @@ export default function SearchCourses({onRegister}) {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [filteredCourses, setFilteredCourses] = useState([]); 
 
-
+  console.log({courses,studentInfo,selectedTerm})
   useEffect(() => {
     if (!searchTerm) {         
       const filtered = courses?.filter((c) => c.program.name ===studentInfo?.studentData?.program && Array.isArray(c.terms) &&

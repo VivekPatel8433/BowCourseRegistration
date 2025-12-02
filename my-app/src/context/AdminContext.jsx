@@ -13,18 +13,17 @@ export function AdminProvider({ children }) {
   const [unreadMessages, setUnreadMessages] = useState([]);
 
   const [readId, setReadId] = useState(null);
-  const [removedCourseId, setRemovedCourseId] = useState(null);
   const [deletedMessageId, setDeletedMessageId] = useState(null);
-  const [updatedCourse, setUpdatedCourse] = useState(null);
+
 
   // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         const programsRes = await api.get('/programs');
-       // console.log({programsRes})
+       console.log({programsRes})
         setPrograms(programsRes.data.programs ?? []);
-        setStudents(programsRes.data.data?.reduce((total, p) => total + p.TotalEnrolledStudents, 0) ?? 0);
+        setStudents(programsRes.data.programs?.reduce((total, p) => total + p.totalEnrolledStudents, 0) ?? 0);
       
         await fetchCourses();
         const adminRes = await api.get('/auth/user/loggedIn');
@@ -59,17 +58,13 @@ export function AdminProvider({ children }) {
   // Handle local updates
   useEffect(() => {
     if (readId) setUnreadMessages(prev => prev.filter(msg => msg._id !== readId));
-    if (removedCourseId) setCourses(prev => prev.filter(c => c.id !== removedCourseId));
     if (deletedMessageId) setMessages(prev => prev.filter(m => m._id !== deletedMessageId));
-    if (updatedCourse) {
-      setCourses(prev => prev.map(c => c.id === updatedCourse.id ? updatedCourse : c));
-    }
-  }, [readId, removedCourseId, deletedMessageId, updatedCourse]);
+  
+  }, [readId, deletedMessageId]);
 
   // CRUD functions
-  const deleteCourse = (id) => setRemovedCourseId(id);
   const deleteMessage = (id) => setDeletedMessageId(id);
-  const updateCourse = (course) => setUpdatedCourse(course);
+  const updateCourse = async() => await fetchCourses();
   const OnCourseCreation = async () => {
     try {
       console.log("Course is created")
@@ -105,7 +100,6 @@ const updateAdmin = (updates) => {
         messages,
         unreadMessages,
         markMessageAsRead,
-        deleteCourse,
         deleteMessage,
         updateCourse,
        OnCourseCreation,

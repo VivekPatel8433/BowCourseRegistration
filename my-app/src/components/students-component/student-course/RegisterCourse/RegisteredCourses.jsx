@@ -56,6 +56,26 @@ export default function RegisteredCourses({ registeredCourses, onRemoveCourse })
                   <span className="font-bold text-gray-900 text-base">{course.code}</span>
                   <span className="text-gray-700 text-sm">{course.name}</span>
                 </div>
+                 <div className="flex items-center gap-5 mt-10 text-gray-500 text-xs">
+                    <div className="flex items-center gap-1">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"
+                          stroke="#6b7280"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      {course.terms.join(',')}
+                    </div>
+                  </div>
                 <button 
                   className="bg-transparent border-none cursor-pointer rounded p-1 hover:bg-red-500 hover:bg-opacity-20 transition-colors"
                   aria-label="Remove course" 

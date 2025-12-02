@@ -118,7 +118,7 @@ export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id; // from JWT
     const profileData = req.body;
-
+    console.log({profileData})
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       profileData,

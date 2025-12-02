@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
     // Student specific
   role: {type: String, enum: ['student', 'admin'], required: true},
   studentData: {
-    phoneNumber: String,
+    phone: String,  // rename to phone,
     birthday: Date,
     department: String,
     program: String

@@ -18,37 +18,7 @@ const MessageView = () => {
   
   const { markMessageAsRead, deleteMessage, messages, unreadMessages } = useAdmin();
 
-  console.log({messageId})
-
-  useEffect(() => {
-    if (messages) {
-      let filtered = messages;
-
-      if (searchTerm) {
-        filtered = filtered.filter(message =>
-          message.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          message.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          message.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          message.email?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-
-      if (selectedCategory !== 'all') {
-        filtered = filtered.filter(message => message.category === selectedCategory);
-      }
-
-      if (selectedStatus !== 'all') {
-        filtered = filtered.filter(message => message.status === selectedStatus);
-      }
-
-      if (selectedPriority !== 'all') {
-        filtered = filtered.filter(message => message.priority === selectedPriority);
-      }
-
-      const sortedFiltered = sortMessages(filtered);
-      setFilteredMessages(sortedFiltered);
-    }
-  }, [unreadMessages, messages, searchTerm, selectedCategory, selectedStatus, selectedPriority]);
+  console.log({messages,unreadMessages})
 
   useEffect(() => {
     const handleInitialMessage = async () => {
@@ -93,10 +63,10 @@ const MessageView = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(message =>
-        message.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        message.studentId.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         message.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         message.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        message.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        message.studentId.email?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -117,13 +87,17 @@ const MessageView = () => {
   }, [searchTerm, selectedCategory, selectedStatus, selectedPriority, messages]);
 
   const handleSelectMessage = async (message) => {
-    setSelectedMessage(message);
-    setResponseText(message.response || '');
+  setSelectedMessage(message);
 
-    if (message.status === 'unread') {
-      markMessageAsRead(message._id);
-    }
-  };
+  // Get the latest response text if it exists
+  const latestResponse = message.responses?.[message.responses.length - 1]?.responseText ?? '';
+  setResponseText(latestResponse);
+
+  if (message.status === 'unread') {
+    markMessageAsRead(message._id);
+  }
+};
+
 
   const handleSubmitResponse = async () => {
     if (!selectedMessage || !responseText.trim()) return;
@@ -135,11 +109,11 @@ const MessageView = () => {
         ...prev, 
         response: responseText.trim()
       }));
-      await api.post(`message/response/${selectedMessage.id}`, {
+      await api.patch(`/students/message/${selectedMessage._id}`, {
         response: responseText.trim()??null
       });
       
-      alert('Response sent successfully!');
+  
     } catch (error) {
       console.error('Error sending response:', error);
      
@@ -158,10 +132,9 @@ const MessageView = () => {
           setResponseText('');
         }
         
-        alert('Message deleted successfully!');
       } catch (error) {
         console.error('Error deleting message:', error);
-        alert('Error deleting message. Please try again.');
+      
       }
     }
   };
@@ -199,7 +172,7 @@ const MessageView = () => {
   const stats = {
     total: messages?.length || 0,
     unread: unreadMessages?.length || 0,
-    responded: messages?.filter(m => m.response && m.status === "read").length || 0,
+    responded: messages?.filter(m => m.responses && m.status === "read").length || 0,
     highPriority: messages?.filter(m => m.priority === 'high').length || 0
   };
 
@@ -398,7 +371,7 @@ const MessageView = () => {
                 
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleDeleteMessage(selectedMessage.id)}
+                    onClick={() => handleDeleteMessage(selectedMessage._id)}
                     className="px-3 py-2 bg-red-500 text-white rounded border-none cursor-pointer text-sm"
                     title="Delete Message"
                   >
@@ -411,11 +384,11 @@ const MessageView = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
                     <strong className="text-gray-600 text-sm">Student:</strong>
-                    <span>{selectedMessage.studentName || 'N/A'} ({selectedMessage.studentId || 'N/A'})</span>
+                    <span> {selectedMessage.studentId?.firstName || 'N/A'}{" "} {selectedMessage.studentId?.lastName || ''}</span>
                   </div>
                   <div className="flex flex-col gap-1">
                     <strong className="text-gray-600 text-sm">Email:</strong>
-                    <span>{selectedMessage.email}</span>
+                    <span>{selectedMessage.studentId.email}</span>
                   </div>
                   <div className="flex flex-col gap-1">
                     <strong className="text-gray-600 text-sm">Program:</strong>

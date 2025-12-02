@@ -14,7 +14,7 @@ const cards = [
   },
   {
     title: "Program",
-    value: "Software Development",
+    value: "Diploma",
     subtitle: "Diploma (2 years)",
     icon: <FaGraduationCap />,
     status: null,
@@ -85,8 +85,8 @@ if (month >= 9 && month <= 12) {
   termSubtitle = "Jun-Sep";
 }
 const DashboardCards = () => {
-   const {studentInfo,setStudentInfo}= useStudent();// student custom hook
-
+   const {studentInfo,setStudentInfo,programs}= useStudent();// student custom hook
+    console.log(studentInfo,programs)
    useEffect(() => {
   const fetchStudentData = async () => {
     try {
@@ -96,7 +96,13 @@ const DashboardCards = () => {
      
       // Update cards dynamically
       cards[1].value = res?.data?.deptName || cards[1].value;
-      cards[1].subtitle = `${res?.data?.programName} (${parseInt(res?.data?.duration)})`;
+
+
+      const matchedProgram = programs.find(p => p.name === studentInfo.studentData.program);
+
+      cards[1].subtitle = matchedProgram ? matchedProgram.duration +' years': '';
+
+
       cards[2].value = res?.data?.deptName || cards[2].value;
 
       // Current Term card

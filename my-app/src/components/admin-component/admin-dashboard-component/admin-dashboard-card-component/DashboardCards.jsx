@@ -56,8 +56,9 @@ const DashboardCards = () => {
                   {courseItem.code} - {courseItem.name}
                 </strong>
                 <p className="mt-1 text-xs text-gray-600">
-                  {courseItem.term} • {courseItem.totalEnrollment} students enrolled
+                  {courseItem.terms}  {'   '+courseItem.totalEnrollment} students enrolled
                 </p>
+                
               </div>
             </div>
           ))}
@@ -81,10 +82,10 @@ const DashboardCards = () => {
             >
               <div>
                 <strong className="text-sm">{prog.name}</strong>
-                <p className="mt-1 text-xs text-gray-600">{prog.duration}</p>
+                <p className="mt-1 text-xs text-gray-600">{prog.duration} year</p>
               </div>
               <span style={{ color: colors[idx].textColor }} className="text-sm">
-                {prog.TotalEnrolledStudents} students
+                {prog.totalEnrolledStudents} students
               </span>
             </div>
           ))}

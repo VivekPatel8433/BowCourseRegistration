@@ -8,19 +8,29 @@ export const StudentProvider = ({ children }) => {
   const [studentInfo, setStudentInfo] = useState(null);
   const [courses, setCourses] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState(null);
+    const [programs, setPrograms] = useState([]);
 
   // Fetch courses on mount
   useEffect(() => {
     (async () => {
       await fetchCourses();
       await fetchEnrolledCourses();
+      await fetchPrograms();
     })();
   }, []);
 
+   const fetchPrograms = async()=>{
+  const programsRes= await api.get('/programs');
+        console.log({programsRes})
+        setPrograms(programsRes.data.programs ?? []);
+      
+   }
+    
   // Fetch all courses
   const fetchCourses = async () => {
     try {
       const res = await api.get("/courses/all");
+      console.log({res})
       setCourses(res.data.courses);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -74,6 +84,7 @@ export const StudentProvider = ({ children }) => {
         enrolledCourses,
         enroll,
         unenroll,
+        programs
        
       }}
     >

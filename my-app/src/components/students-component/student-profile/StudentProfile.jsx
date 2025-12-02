@@ -3,13 +3,14 @@ import api from "../../../services/api"
 import {sanitizeInputs} from "../../../services/sanitizeInput"
 import {useStudent} from "../../../context/StudentContext"
 const StudentProfile = () => {
+   const { studentInfo: currentUser ,setStudentInfo,} = useStudent();
   const [profile, setProfile] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profile.photo);
   const [saveClicked, setSaveClicked] = useState(false);
- const { studentInfo: currentUser ,setStudentInfo,} = useStudent();
 
 
+console.log({currentUser})
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
@@ -89,7 +90,7 @@ const StudentProfile = () => {
             {readonlyFields.map(({ label, name }) => (
               <div key={name} className="flex gap-4 py-2 border-b border-gray-200 last:border-b-0">
                 <span className="font-medium text-gray-600 w-32">{label}:</span>
-                <span className="text-gray-800 flex-1 text-left">{profile[name]}</span>
+                <span className="text-gray-800 flex-1 text-left">{currentUser?.studentData[name]}</span>
               </div>
             ))}
           </div>
