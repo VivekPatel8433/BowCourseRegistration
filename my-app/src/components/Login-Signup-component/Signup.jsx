@@ -133,7 +133,7 @@ export default function Signup({ onSignup }) {
   };
 
   try {
-    const res = await api.post( "/auth/register",  sanitizeInputs(payload) ); // sanitize inputs
+    const res = await api.post( "/auth/register", sanitizeInputs(payload) ); // sanitize inputs
 
     console.log("Registration success:", res.data);
 

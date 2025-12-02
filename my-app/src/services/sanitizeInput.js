@@ -1,14 +1,14 @@
 import DOMPurify from 'dompurify';
 
- export const sanitizeInputs = (inputs) => {
+export  function sanitizeInputs(data) {
   const sanitized = {};
-  for (const key in inputs) {
-    if (Object.hasOwnProperty.call(inputs, key)) {
-      sanitized[key] = DOMPurify.sanitize(inputs[key]);
-    }
+  for (const key in data) {
+    const value = data[key];
+    sanitized[key] = typeof value === "string" ? value.trim() : value;
   }
   return sanitized;
-};
+}
+
 
 export const sanitizeInput = (input) => {
   return DOMPurify.sanitize(input);

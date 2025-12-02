@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils.js/generateToken.js";
 
 // Helper function to validate fields
-const validateUserInput = ({ firstName, lastName, email, username, password, role, studentData }) => {
+const validateUserInput = ({ firstName, lastName, email, username, password, role }) => {
   const errors = [];
 
   // Required fields
@@ -25,8 +25,7 @@ const validateUserInput = ({ firstName, lastName, email, username, password, rol
   const validRoles = ["student", "admin"];
   if (role && !validRoles.includes(role)) errors.push("Role must be either 'student' or 'admin'.");
 
-  // If student, check studentData exists
-  if (role === "student" && !studentData) errors.push("Student data is required for role 'student'.");
+ 
 
   return errors;
 };
@@ -36,8 +35,9 @@ export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, username, password, role, studentData } = req.body;
 
+   
     // Validate input
-    const errors = validateUserInput({ firstName, lastName, email, username, password, role, studentData });
+    const errors = validateUserInput({ firstName, lastName, email, username, password, role });
     if (errors.length > 0) return res.status(400).json({ message: errors.join(" ") });
 
     // Check if user exists
